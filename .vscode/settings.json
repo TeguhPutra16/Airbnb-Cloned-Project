@@ -1,0 +1,8 @@
+{
+    "yaml.schemas": {
+        "https://json.schemastore.org/yamllint.json": [
+            "file:///d%3A/ALTERA/Project/Project_2/Project_BE%20-%20demo/.github/workflows/deploy.yml",
+            "file:///d%3A/ALTERA/Project/Project_3/Project_BE-PART3/.github/workflows/deploy.yml"
+        ]
+    }
+}
