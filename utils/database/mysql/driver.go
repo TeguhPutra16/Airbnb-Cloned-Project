@@ -4,6 +4,7 @@ import (
 	"be13/project/config"
 	"fmt"
 	"log"
+	"os/user"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -22,5 +23,6 @@ func InitDB(cfg *config.AppConfig) *gorm.DB {
 }
 
 func MigrateDB(db *gorm.DB) {
+	db.AutoMigrate(&user.User{})
 
 }
