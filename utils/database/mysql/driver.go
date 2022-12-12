@@ -2,9 +2,9 @@ package mysql
 
 import (
 	"be13/project/config"
+	user "be13/project/features/user/repository"
 	"fmt"
 	"log"
-	"os/user"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"

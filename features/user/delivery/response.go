@@ -9,8 +9,6 @@ type UserRespon struct {
 	Phone   string `json:"phone"`
 	Role    string `json:"role" form:"role"`
 	Address string `json:"address"`
-	Status  string `json:"status"`
-	// Book  []BookRespon `json:"book"`
 }
 
 func UserCoreToUserRespon(dataCore user.CoreUser) UserRespon { // data user core yang ada di controller yang memanggil user repository
