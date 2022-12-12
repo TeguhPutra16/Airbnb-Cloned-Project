@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"be13/project/features/homestay/repository"
 	_user "be13/project/features/user"
 
 	"gorm.io/gorm"
@@ -8,12 +9,13 @@ import (
 
 type User struct {
 	gorm.Model
-	Name     string `gorm:"type:varchar(50)"`
-	Password string `gorm:"type:varchar(500)"`
-	Email    string
-	Address  string
-	Status   string
-	Role     string
+	Name      string `gorm:"type:varchar(50)"`
+	Password  string `gorm:"type:varchar(500)"`
+	Email     string
+	Address   string
+	Status    string
+	Role      string
+	Homestays []repository.Homestay
 }
 
 func FromUserCore(dataCore _user.CoreUser) User { //fungsi yang mengambil data dari entities usercore dan merubah data ke user gorm(model.go)

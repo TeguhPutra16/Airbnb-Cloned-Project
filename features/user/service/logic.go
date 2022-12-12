@@ -14,10 +14,6 @@ type UserService struct {
 	validate       *validator.Validate
 }
 
-// Login implements user.ServiceEntities
-
-// Login implements user.ServiceEntities
-
 func New(repo user.RepositoryEntities) user.ServiceEntities { //dengan kembalian user.service
 	return &UserService{
 		userRepository: repo,
