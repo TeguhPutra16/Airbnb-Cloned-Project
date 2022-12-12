@@ -20,18 +20,18 @@ func New(db *gorm.DB) user.RepositoryEntities { // user.repository mengimplement
 }
 
 // Create implements user.RepositoryEntities
-func (repo *userRepository) Create(input user.CoreUser) (row int, err error) {
+func (repo *userRepository) Create(input user.CoreUser) (err error) {
 	userGorm := FromUserCore(input) //dari gorm model ke user core yang ada di entities
 
 	tx := repo.db.Create(&userGorm) // proses insert data
 
 	if tx.Error != nil {
-		return -1, tx.Error
+		return tx.Error
 	}
 	if tx.RowsAffected == 0 {
-		return 0, errors.New("insert failed")
+		return errors.New("insert failed")
 	}
-	return int(tx.RowsAffected), nil
+	return nil
 
 }
 func (repo *userRepository) GetAll() (data []user.CoreUser, err error) {

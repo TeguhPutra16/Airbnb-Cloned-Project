@@ -29,7 +29,7 @@ type ServiceEntities interface { //sebagai contract yang dibuat di layer service
 
 type RepositoryEntities interface { // berkaitan database
 	GetAll() (data []CoreUser, err error)
-	Create(input CoreUser) (row int, err error)
+	Create(input CoreUser) (err error)
 
 	Update(id int, input CoreUser) error
 	GetById(id int) (data CoreUser, err error)

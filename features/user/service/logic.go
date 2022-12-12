@@ -28,7 +28,7 @@ func (service *UserService) Create(input user.CoreUser) (err error) {
 		return validateERR
 	}
 
-	_, errCreate := service.userRepository.Create(input)
+	errCreate := service.userRepository.Create(input)
 	if errCreate != nil {
 		return errors.New("GAGAL MENAMBAH DATA , QUERY ERROR")
 	}
