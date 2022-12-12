@@ -43,6 +43,7 @@ func (delivery *homeStayDelivery) Create(c echo.Context) error {
 	dataCore := UserRequestToUserCore(homestayReq)
 
 	dataCore.UserID = uint(userIdtoken)
+	dataCore.Status = "Available"
 
 	errResult := delivery.homeStayService.Create(dataCore)
 	if errResult != nil {
@@ -51,4 +52,18 @@ func (delivery *homeStayDelivery) Create(c echo.Context) error {
 
 	return c.JSON(http.StatusCreated, helper.SuccessResponse("Successfully Added Home Stay"))
 
+}
+
+func (delivery *homeStayDelivery) GetBytime(c echo.Context) error {
+	start := c.QueryParam("start")
+
+	end := c.QueryParam("end")
+
+	data, err := delivery.homeStayService.GetBytime(start, end)
+
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse("erorr read data"))
+	}
+	var ResponData = ListCoreToRespon(data)
+	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("berhasil membaca  user", ResponData))
 }

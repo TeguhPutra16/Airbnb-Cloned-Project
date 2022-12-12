@@ -14,24 +14,17 @@ type UserRepo struct {
 }
 
 // Create provides a mock function with given fields: input
-func (_m *UserRepo) Create(input user.CoreUser) (int, error) {
+func (_m *UserRepo) Create(input user.CoreUser) error {
 	ret := _m.Called(input)
 
-	var r0 int
-	if rf, ok := ret.Get(0).(func(user.CoreUser) int); ok {
+	var r0 error
+	if rf, ok := ret.Get(0).(func(user.CoreUser) error); ok {
 		r0 = rf(input)
 	} else {
-		r0 = ret.Get(0).(int)
+		r0 = ret.Error(0)
 	}
 
-	var r1 error
-	if rf, ok := ret.Get(1).(func(user.CoreUser) error); ok {
-		r1 = rf(input)
-	} else {
-		r1 = ret.Error(1)
-	}
-
-	return r0, r1
+	return r0
 }
 
 // DeleteById provides a mock function with given fields: id

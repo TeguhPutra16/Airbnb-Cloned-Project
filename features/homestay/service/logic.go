@@ -41,8 +41,9 @@ func (*homeStayService) GetById(id int) (data homestay.CoreHomestay, err error) 
 }
 
 // GetBytime implements homestay.ServiceEntities
-func (*homeStayService) GetBytime(start string, end string) (data []homestay.CoreHomestay, err error) {
-	panic("unimplemented")
+func (service *homeStayService) GetBytime(start string, end string) (data []homestay.CoreHomestay, err error) {
+	data, err = service.homeStayRepository.GetBytime(start, end)
+	return data, err
 }
 
 // Update implements homestay.ServiceEntities
