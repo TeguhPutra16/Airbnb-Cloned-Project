@@ -2,6 +2,7 @@ package service
 
 import (
 	"be13/project/features/homestay"
+	"errors"
 
 	"github.com/go-playground/validator/v10"
 )
@@ -32,8 +33,9 @@ func (service *homeStayService) DeleteById(id int) (homestay.CoreHomestay, error
 }
 
 // GetAllhomestay implements homestay.ServiceEntities
-func (*homeStayService) GetAllhomestay() (data []homestay.CoreHomestay, err error) {
-	panic("unimplemented")
+func (service *homeStayService) GetAllhomestay() (data []homestay.CoreHomestay, err error) {
+	data, err = service.homeStayRepository.GetAll() // memanggil struct entities repository yang ada di entities yang berisi coding logic
+	return
 }
 
 // GetById implements homestay.ServiceEntities
@@ -48,6 +50,11 @@ func (service *homeStayService) GetBytime(start string, end string) (data []home
 }
 
 // Update implements homestay.ServiceEntities
-func (*homeStayService) Update(id int, input homestay.CoreHomestay) error {
-	panic("unimplemented")
+func (service *homeStayService) Update(id int, input homestay.CoreHomestay) error {
+	errUpdate := service.homeStayRepository.Update(id, input)
+	if errUpdate != nil {
+		return errors.New("GAGAL mengupdate data , QUERY ERROR")
+	}
+
+	return nil
 }
