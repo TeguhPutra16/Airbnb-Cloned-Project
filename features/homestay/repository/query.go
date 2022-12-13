@@ -36,8 +36,23 @@ func (repo *homeStayRepository) Create(input homestay.CoreHomestay) (err error) 
 }
 
 // DeleteById implements homestay.RepositoryEntities
-func (*homeStayRepository) DeleteById(id int) (homestay.CoreHomestay, error) {
-	panic("unimplemented")
+func (repo *homeStayRepository) DeleteById(id int) (homestay.CoreHomestay, error) {
+	home := Homestay{}
+	tx1 := repo.db.Delete(&home, id)
+	if tx1.Error != nil {
+		return homestay.CoreHomestay{}, tx1.Error
+	}
+
+	txres := repo.db.Unscoped().Where("id=?", id).Find(&home)
+	if txres.Error != nil {
+		return homestay.CoreHomestay{}, txres.Error
+	}
+	if tx1.RowsAffected == 0 {
+		return homestay.CoreHomestay{}, errors.New("id not found")
+
+	}
+	result := home.ModelsToCore()
+	return result, nil
 }
 
 // GetAll implements homestay.RepositoryEntities

@@ -26,8 +26,9 @@ func (service *homeStayService) Create(input homestay.CoreHomestay) (err error) 
 }
 
 // DeleteById implements homestay.ServiceEntities
-func (*homeStayService) DeleteById(id int) (homestay.CoreHomestay, error) {
-	panic("unimplemented")
+func (service *homeStayService) DeleteById(id int) (homestay.CoreHomestay, error) {
+	data, err := service.homeStayRepository.DeleteById(id) // memanggil struct entities repository yang ada di entities yang berisi coding logic
+	return data, err
 }
 
 // GetAllhomestay implements homestay.ServiceEntities
