@@ -56,8 +56,16 @@ func (repo *homeStayRepository) DeleteById(id int) (homestay.CoreHomestay, error
 }
 
 // GetAll implements homestay.RepositoryEntities
-func (*homeStayRepository) GetAll() (data []homestay.CoreHomestay, err error) {
-	panic("unimplemented")
+func (repo *homeStayRepository) GetAll() (data []homestay.CoreHomestay, err error) {
+	var home []Homestay //mengambil data gorm model(model.go)
+	tx := repo.db.Find(&home)
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+
+	var DataCore = ListModelTOCore(home) //mengambil data dari gorm model(file repository(model.go))
+
+	return DataCore, nil
 }
 
 // GetById implements homestay.RepositoryEntities
@@ -92,6 +100,14 @@ func (repo *homeStayRepository) GetBytime(start string, end string) (data []home
 }
 
 // Update implements homestay.RepositoryEntities
-func (*homeStayRepository) Update(id int, input homestay.CoreHomestay) error {
-	panic("unimplemented")
+func (repo *homeStayRepository) Update(id int, input homestay.CoreHomestay) error {
+	userGorm := FromCore(input)
+
+	tx := repo.db.Model(&userGorm).Where("id = ?", id).Updates(&userGorm)
+
+	if tx.Error != nil {
+		return tx.Error
+	}
+
+	return nil
 }

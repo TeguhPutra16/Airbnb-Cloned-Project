@@ -79,3 +79,33 @@ func (delivery *homeStayDelivery) DeleteById(c echo.Context) error {
 	result := CoreToRespon(del)
 	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("berhasil menghapus user", result))
 }
+
+func (delivery *homeStayDelivery) Update(c echo.Context) error {
+
+	id, _ := strconv.Atoi(c.Param("id"))
+
+	homeInput := HomestayRequest{}
+	errBind := c.Bind(&homeInput) // menangkap data yg dikirim dari req body dan disimpan ke variabel
+	if errBind != nil {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Error binding data "+errBind.Error()))
+	}
+
+	dataCore := UserRequestToUserCore(homeInput)
+	err := delivery.homeStayService.Update(id, dataCore)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, helper.FailedResponse("Failed update data"+err.Error()))
+	}
+	return c.JSON(http.StatusCreated, helper.SuccessResponse("success Update data"))
+}
+
+func (delivery *homeStayDelivery) GetAllhomestay(c echo.Context) error {
+
+	result, err := delivery.homeStayService.GetAllhomestay() //memanggil fungsi service yang ada di folder service
+
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse("erorr read data"))
+	}
+	var ResponData = ListCoreToRespon(result)
+	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("berhasil membaca homestay", ResponData))
+
+}
