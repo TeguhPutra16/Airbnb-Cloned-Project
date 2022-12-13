@@ -23,6 +23,7 @@ func NewHome(Service homestay.ServiceEntities, e *echo.Echo) {
 	e.POST("/homestay", handler.Create, middlewares.JWTMiddleware())
 	e.GET("/homestays", handler.GetAllhomestay, middlewares.JWTMiddleware())
 	e.PUT("/homestay/:id", handler.Update, middlewares.JWTMiddleware())
+	e.GET("/homestay/:id", handler.GetById, middlewares.JWTMiddleware())
 	e.DELETE("/homestay/:id", handler.DeleteById, middlewares.JWTMiddleware())
 	e.GET("/homestay", handler.GetBytime, middlewares.JWTMiddleware())
 
@@ -111,4 +112,15 @@ func (delivery *homeStayDelivery) GetAllhomestay(c echo.Context) error {
 	var ResponData = ListCoreToRespon(result)
 	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("berhasil membaca homestay", ResponData))
 
+}
+
+func (delivery *homeStayDelivery) GetById(c echo.Context) error {
+	id, _ := strconv.Atoi(c.Param("id"))
+	result, err := delivery.homeStayService.GetById(id) //memanggil fungsi service yang ada di folder service//jika return nya 2 maka variable harus ada 2
+
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse("erorr read data"))
+	}
+
+	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("berhasil membaca ruangan dan commentnya", result))
 }

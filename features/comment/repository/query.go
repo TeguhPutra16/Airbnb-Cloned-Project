@@ -3,6 +3,7 @@ package repository
 import (
 	"be13/project/features/comment"
 	"be13/project/features/homestay/repository"
+
 	"log"
 
 	"errors"
@@ -32,19 +33,18 @@ func (repo *commentRepository) CreateComment(input comment.CoreComment) (err err
 	if tx.RowsAffected == 0 {
 		return errors.New("insert failed")
 	}
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////menghitung jumlah comment untuk suatu homestay//////////////////////////////////////////////////
 	var commentModel []Comment
 
 	repo.db.Where("homestay_id=?", input.HomestayID).Find(&commentModel)
 
 	jumData := len(commentModel)
 	log.Println("jumData", jumData)
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////select curretn avgrating////////////////////////////////////////////////////////////////////
 	homes := repository.Homestay{}
 	repo.db.First(&homes, input.HomestayID)
-
+	////////////////////////////////////////proses update data avgrating homestay ketika comment ditambahkan/////////////////////////////////////////////////////////////////////////////////////////////
 	home := repository.Homestay{}
-
 	home.AvgRate = (homes.AvgRate + input.Ratings) / jumData
 
 	tx2 := repo.db.Model(&home).Where("id = ?", input.HomestayID).Updates(&home)
@@ -57,8 +57,23 @@ func (repo *commentRepository) CreateComment(input comment.CoreComment) (err err
 }
 
 // DeleteById implements comment.RepositoryInterface
-func (*commentRepository) DeleteById(id int) (comment.CoreComment, error) {
-	panic("unimplemented")
+func (repo *commentRepository) DeleteById(id int) (comment.CoreComment, error) {
+	komen := Comment{}
+	tx1 := repo.db.Delete(&komen, id)
+	if tx1.Error != nil {
+		return comment.CoreComment{}, tx1.Error
+	}
+
+	txres := repo.db.Unscoped().Where("id=?", id).Find(&komen)
+	if txres.Error != nil {
+		return comment.CoreComment{}, txres.Error
+	}
+	if tx1.RowsAffected == 0 {
+		return comment.CoreComment{}, errors.New("id not found")
+
+	}
+	result := komen.ModelsToCore()
+	return result, nil
 }
 
 // GetAllComment implements comment.RepositoryInterface
@@ -72,6 +87,14 @@ func (*commentRepository) GetById(id int) (data comment.CoreComment, err error) 
 }
 
 // UpdateComment implements comment.RepositoryInterface
-func (*commentRepository) UpdateComment(id int, input comment.CoreComment) error {
-	panic("unimplemented")
+func (repo *commentRepository) UpdateComment(id int, input comment.CoreComment) error {
+	komen := FromCore(input)
+
+	tx := repo.db.Model(&komen).Where("id = ?", id).Updates(&komen)
+
+	if tx.Error != nil {
+		return tx.Error
+	}
+
+	return nil
 }

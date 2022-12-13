@@ -1,6 +1,9 @@
 package homestay
 
-import "time"
+import (
+	"be13/project/features/comment"
+	"time"
+)
 
 type CoreHomestay struct {
 	ID          uint
@@ -13,6 +16,7 @@ type CoreHomestay struct {
 	UserID      uint
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
+	Comments    []comment.CoreComment
 }
 
 type ServiceEntities interface {

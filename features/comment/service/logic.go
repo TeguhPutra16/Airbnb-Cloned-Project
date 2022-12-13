@@ -2,6 +2,7 @@ package service
 
 import (
 	"be13/project/features/comment"
+	"errors"
 
 	"github.com/go-playground/validator/v10"
 )
@@ -27,8 +28,9 @@ func (service *commentService) CreateComment(input comment.CoreComment) (err err
 }
 
 // DeleteById implements comment.ServiceInterface
-func (*commentService) DeleteById(id int) (comment.CoreComment, error) {
-	panic("unimplemented")
+func (service *commentService) DeleteById(id int) (comment.CoreComment, error) {
+	data, err := service.commentRepository.DeleteById(id) // memanggil struct entities repository yang ada di entities yang berisi coding logic
+	return data, err
 }
 
 // GetAllComment implements comment.ServiceInterface
@@ -42,6 +44,11 @@ func (*commentService) GetById(id int) (data comment.CoreComment, err error) {
 }
 
 // UpdateComment implements comment.ServiceInterface
-func (*commentService) UpdateComment(id int, input comment.CoreComment) error {
-	panic("unimplemented")
+func (service *commentService) UpdateComment(id int, input comment.CoreComment) error {
+	errUpdate := service.commentRepository.UpdateComment(id, input)
+	if errUpdate != nil {
+		return errors.New("update comment failed")
+	}
+
+	return nil
 }
