@@ -22,6 +22,7 @@ func NewHome(Service homestay.ServiceEntities, e *echo.Echo) {
 	}
 
 	e.POST("/homestay", handler.Create, middlewares.JWTMiddleware())
+	e.GET("/homestays", handler.GetBytime)
 
 }
 

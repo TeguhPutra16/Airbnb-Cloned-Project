@@ -4,6 +4,9 @@ import (
 	deliveryAuth "be13/project/features/auth/delivery"
 	repoAuth "be13/project/features/auth/repository"
 	serviceAuth "be13/project/features/auth/service"
+	deliveryHome "be13/project/features/homestay/delivery"
+	repoHome "be13/project/features/homestay/repository"
+	serviceHome "be13/project/features/homestay/service"
 	userDelivery "be13/project/features/user/delivery"
 	userRepo "be13/project/features/user/repository"
 	userService "be13/project/features/user/service"
@@ -20,5 +23,9 @@ func InitFactory(e *echo.Echo, db *gorm.DB) {
 	authRepoFactory := repoAuth.NewAuth(db)
 	authServiceFactory := serviceAuth.NewAuth(authRepoFactory)
 	deliveryAuth.NewAuth(authServiceFactory, e)
+
+	homeRepoFactory := repoHome.NewHome(db)
+	homeServiceFactory := serviceHome.NewHome(homeRepoFactory)
+	deliveryHome.NewHome(homeServiceFactory, e)
 
 }

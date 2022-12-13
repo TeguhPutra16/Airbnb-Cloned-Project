@@ -12,11 +12,9 @@ type Homestay struct {
 	Description string
 	Address     string
 	Status      string
-	AvgRate     uint
-	Price       uint
+	AvgRate     int
+	Price       int
 	UserID      uint
-	// Images      []image
-	// Comments	[]comment
 }
 
 func FromCore(dataCore homestay.CoreHomestay) Homestay { //fungsi yang mengambil data dari entities usercore dan merubah data ke user gorm(model.go)

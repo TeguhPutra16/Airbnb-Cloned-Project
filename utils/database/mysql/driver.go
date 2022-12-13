@@ -2,6 +2,7 @@ package mysql
 
 import (
 	"be13/project/config"
+	home "be13/project/features/homestay/repository"
 	user "be13/project/features/user/repository"
 	"fmt"
 	"log"
@@ -24,5 +25,6 @@ func InitDB(cfg *config.AppConfig) *gorm.DB {
 
 func MigrateDB(db *gorm.DB) {
 	db.AutoMigrate(&user.User{})
+	db.AutoMigrate(&home.Homestay{})
 
 }
