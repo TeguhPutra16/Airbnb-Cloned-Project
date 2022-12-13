@@ -20,7 +20,7 @@ func NewHome(db *gorm.DB) homestay.RepositoryEntities { // user.repository mengi
 }
 
 // Create implements homestay.RepositoryEntities
-func (repo *homeStayRepository) Create(input homestay.CoreHomestay) (err error) {
+func (repo *homeStayRepository) Create(input homestay.CoreHomestay) error {
 
 	userGorm := FromCore(input) //dari gorm model ke user core yang ada di entities
 
@@ -85,7 +85,7 @@ func (repo *homeStayRepository) GetBytime(start string, end string) (data []home
 		return nil, errConvtime2
 	}
 
-	tx := repo.db.Where("created_at BETWEEN ? AND ?AND status=?", checkIn, checkOut, "Available").Find(&home) //start dan end harus di convert dulu
+	tx := repo.db.Where("status=? AND created_at BETWEEN ? AND ?", "Available", checkIn, checkOut).Find(&home) //start dan end harus di convert dulu
 	if tx.Error != nil {
 		return nil, tx.Error
 	}
