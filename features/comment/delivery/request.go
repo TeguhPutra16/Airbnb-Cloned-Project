@@ -5,7 +5,7 @@ import (
 )
 
 type CommentRequest struct {
-	HomestayID uint   `json:"home_stay_id" form:"home_stay_id"`
+	HomestayID uint   `json:"homestay_id" form:"homestay_id"`
 	Notes      string `json:"notes" form:"notes"`
 	Ratings    int    `json:"ratings" form:"ratings"`
 }

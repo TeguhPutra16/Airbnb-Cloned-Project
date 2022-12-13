@@ -15,7 +15,7 @@ type commentDelivery struct {
 	commentService comment.ServiceInterface
 }
 
-func NewHome(Service comment.ServiceInterface, e *echo.Echo) {
+func NewComment(Service comment.ServiceInterface, e *echo.Echo) {
 	handler := &commentDelivery{
 		commentService: Service,
 	}
@@ -35,9 +35,13 @@ func (delivery *commentDelivery) Create(c echo.Context) error {
 	log.Println("user id", userIdtoken)
 
 	commentReq := CommentRequest{}
+
 	errbind := c.Bind(&commentReq)
 	if errbind != nil {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("erorr read data"+errbind.Error()))
+	}
+	if commentReq.Ratings < 0 || commentReq.Ratings > 5 {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse("rates in range 0 to 5"))
 	}
 
 	dataCore := UserRequestToUserCore(commentReq)

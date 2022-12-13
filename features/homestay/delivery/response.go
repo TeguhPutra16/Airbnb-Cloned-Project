@@ -6,16 +6,16 @@ import (
 )
 
 type HomestayRespon struct {
-	ID          uint
-	Title       string
-	Description string
-	Address     string
-	Status      string
-	AvgRate     int
-	Price       int
-	UserID      uint
-	CreatedAt   time.Time
-	UpdatedAt   time.Time
+	ID          uint      `json:"id"`
+	Title       string    `json:"title"`
+	Description string    `json:"description"`
+	Address     string    `json:"address"`
+	Status      string    `json:"status"`
+	AvgRate     int       `json:"avg_rate"`
+	Price       int       `json:"price"`
+	UserID      uint      `json:"user_id"`
+	CreatedAt   time.Time `json:"created_at"`
+	UpdatedAt   time.Time `json:"updated_at"`
 }
 
 func CoreToRespon(dataCore homestay.CoreHomestay) HomestayRespon { // data user core yang ada di controller yang memanggil user repository
@@ -27,7 +27,7 @@ func CoreToRespon(dataCore homestay.CoreHomestay) HomestayRespon { // data user 
 		Status:      dataCore.Status,
 		AvgRate:     dataCore.AvgRate,
 		Price:       dataCore.Price,
-		UserID:      dataCore.ID,
+		UserID:      dataCore.UserID,
 		CreatedAt:   dataCore.CreatedAt,
 		UpdatedAt:   dataCore.UpdatedAt,
 	}

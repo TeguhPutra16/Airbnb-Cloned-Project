@@ -21,6 +21,7 @@ type commentService struct {
 
 // CreateComment implements comment.ServiceInterface
 func (service *commentService) CreateComment(input comment.CoreComment) (err error) {
+
 	err = service.commentRepository.CreateComment(input)
 	return err
 }

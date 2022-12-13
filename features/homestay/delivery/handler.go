@@ -1,6 +1,5 @@
 package delivery
 
-///handler = controller
 import (
 	"be13/project/features/homestay"
 	"be13/project/middlewares"
@@ -22,7 +21,10 @@ func NewHome(Service homestay.ServiceEntities, e *echo.Echo) {
 	}
 
 	e.POST("/homestay", handler.Create, middlewares.JWTMiddleware())
-	e.GET("/homestays", handler.GetBytime)
+	e.GET("/homestays", handler.GetAllhomestay, middlewares.JWTMiddleware())
+	e.PUT("/homestay/:id", handler.Update, middlewares.JWTMiddleware())
+	e.DELETE("/homestay/:id", handler.DeleteById, middlewares.JWTMiddleware())
+	e.GET("/homestay", handler.GetBytime, middlewares.JWTMiddleware())
 
 }
 
@@ -44,8 +46,8 @@ func (delivery *homeStayDelivery) Create(c echo.Context) error {
 
 	dataCore := UserRequestToUserCore(homestayReq)
 
-	dataCore.UserID = uint(userIdtoken)
 	dataCore.Status = "Available"
+	dataCore.UserID = uint(userIdtoken)
 
 	errResult := delivery.homeStayService.Create(dataCore)
 	if errResult != nil {

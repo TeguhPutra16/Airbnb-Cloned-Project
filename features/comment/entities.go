@@ -4,7 +4,7 @@ import "time"
 
 type CoreComment struct {
 	ID         uint
-	HomestayID uint
+	HomestayID uint `validate:"required"`
 	UserID     uint
 	Notes      string
 	Ratings    int

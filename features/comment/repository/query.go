@@ -3,6 +3,7 @@ package repository
 import (
 	"be13/project/features/comment"
 	"be13/project/features/homestay/repository"
+	"log"
 
 	"errors"
 
@@ -11,6 +12,12 @@ import (
 
 type commentRepository struct {
 	db *gorm.DB
+}
+
+func NewComment(db *gorm.DB) comment.RepositoryInterface { // user.repository mengimplementasikan interface repository yang ada di entities
+	return &commentRepository{
+		db: db,
+	}
 }
 
 // CreateComment implements comment.RepositoryInterface
@@ -25,20 +32,22 @@ func (repo *commentRepository) CreateComment(input comment.CoreComment) (err err
 	if tx.RowsAffected == 0 {
 		return errors.New("insert failed")
 	}
-
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	var commentModel []Comment
 
-	tx1 := repo.db.Where("homestay_id=?", input.HomestayID).Find(&commentModel)
-	if tx1 != nil {
-		return errors.New("failed update average ratings")
-	}
+	repo.db.Where("homestay_id=?", input.HomestayID).Find(&commentModel)
 
 	jumData := len(commentModel)
+	log.Println("jumData", jumData)
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	homes := repository.Homestay{}
+	repo.db.First(&homes, input.HomestayID)
 
 	home := repository.Homestay{}
-	home.AvgRate = (home.AvgRate + input.Ratings) / jumData
 
-	tx2 := repo.db.Model(&commentGorm).Where("id = ?", input.HomestayID).Updates(&home)
+	home.AvgRate = (homes.AvgRate + input.Ratings) / jumData
+
+	tx2 := repo.db.Model(&home).Where("id = ?", input.HomestayID).Updates(&home)
 
 	if tx2.Error != nil {
 		return tx2.Error
@@ -65,11 +74,4 @@ func (*commentRepository) GetById(id int) (data comment.CoreComment, err error) 
 // UpdateComment implements comment.RepositoryInterface
 func (*commentRepository) UpdateComment(id int, input comment.CoreComment) error {
 	panic("unimplemented")
-}
-
-func NewComment(db *gorm.DB) comment.RepositoryInterface { // user.repository mengimplementasikan interface repository yang ada di entities
-	return &commentRepository{
-		db: db,
-	}
-
 }

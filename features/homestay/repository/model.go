@@ -2,9 +2,20 @@ package repository
 
 import (
 	"be13/project/features/homestay"
+	"time"
 
 	"gorm.io/gorm"
 )
+
+type Comment struct {
+	gorm.Model
+	HomestayID uint
+	UserID     uint
+	Notes      string
+	Ratings    int
+	CreatedAt  time.Time
+	UpdatedAt  time.Time
+}
 
 type Homestay struct {
 	gorm.Model
@@ -15,6 +26,7 @@ type Homestay struct {
 	AvgRate     int
 	Price       int
 	UserID      uint
+	Comments    []Comment
 }
 
 func FromCore(dataCore homestay.CoreHomestay) Homestay { //fungsi yang mengambil data dari entities usercore dan merubah data ke user gorm(model.go)
@@ -25,7 +37,7 @@ func FromCore(dataCore homestay.CoreHomestay) Homestay { //fungsi yang mengambil
 		Status:      dataCore.Status,
 		AvgRate:     dataCore.AvgRate,
 		Price:       dataCore.Price,
-		UserID:      dataCore.ID,
+		UserID:      dataCore.UserID,
 	} ///formating data berdasarkan data gorm dan kita mapping data yang kita butuhkan untuk inputan  klien
 	return homeGorm //insert user
 }
@@ -38,7 +50,7 @@ func (dataModel *Homestay) ModelsToCore() homestay.CoreHomestay { //fungsi yang 
 		Status:      dataModel.Status,
 		AvgRate:     dataModel.AvgRate,
 		Price:       dataModel.Price,
-		UserID:      dataModel.ID,
+		UserID:      dataModel.UserID,
 		CreatedAt:   dataModel.CreatedAt,
 		UpdatedAt:   dataModel.UpdatedAt,
 	}
