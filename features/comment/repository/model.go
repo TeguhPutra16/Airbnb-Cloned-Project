@@ -26,7 +26,7 @@ func FromCore(dataCore comment.CoreComment) Comment { //fungsi yang mengambil da
 	} ///formating data berdasarkan data gorm dan kita mapping data yang kita butuhkan untuk inputan  klien
 	return homeGorm //insert user
 }
-func ModelsToCore(dataModel Comment) comment.CoreComment { //fungsi yang mengambil data dari  user gorm(model.go)  dan merubah data ke entities usercore
+func (dataModel *Comment) ModelsToCore() comment.CoreComment { //fungsi yang mengambil data dari  user gorm(model.go)  dan merubah data ke entities usercore
 	return comment.CoreComment{
 		ID:         dataModel.ID,
 		HomestayID: dataModel.HomestayID,
@@ -40,20 +40,7 @@ func ModelsToCore(dataModel Comment) comment.CoreComment { //fungsi yang mengamb
 func ListModelTOCore(dataModel []Comment) []comment.CoreComment { //fungsi yang mengambil data dari  user gorm(model.go)  dan merubah data ke entities usercore
 	var dataCore []comment.CoreComment
 	for _, value := range dataModel {
-		dataCore = append(dataCore, ModelsToCore(value))
+		dataCore = append(dataCore, value.ModelsToCore())
 	}
 	return dataCore //  untuk menampilkan data ke controller
-}
-
-func AverageRating(data []Comment) (avg int) {
-	var x int
-	for _, v := range data {
-		x = x + v.Ratings
-
-	}
-
-	avg = x / len(data)
-
-	return avg
-
 }

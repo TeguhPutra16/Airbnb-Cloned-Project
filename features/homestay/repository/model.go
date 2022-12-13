@@ -1,21 +1,13 @@
 package repository
 
 import (
+	"be13/project/features/comment"
 	"be13/project/features/homestay"
+
 	"time"
 
 	"gorm.io/gorm"
 )
-
-type Comment struct {
-	gorm.Model
-	HomestayID uint
-	UserID     uint
-	Notes      string
-	Ratings    int
-	CreatedAt  time.Time
-	UpdatedAt  time.Time
-}
 
 type Homestay struct {
 	gorm.Model
@@ -53,6 +45,7 @@ func (dataModel *Homestay) ModelsToCore() homestay.CoreHomestay { //fungsi yang 
 		UserID:      dataModel.UserID,
 		CreatedAt:   dataModel.CreatedAt,
 		UpdatedAt:   dataModel.UpdatedAt,
+		Comments:    LoadFeedsModeltoCore(dataModel.Comments),
 	}
 }
 func ListModelTOCore(dataModel []Homestay) []homestay.CoreHomestay { //fungsi yang mengambil data dari  user gorm(model.go)  dan merubah data ke entities usercore
@@ -61,4 +54,35 @@ func ListModelTOCore(dataModel []Homestay) []homestay.CoreHomestay { //fungsi ya
 		dataCore = append(dataCore, value.ModelsToCore())
 	}
 	return dataCore //  untuk menampilkan data ke controller
+}
+
+func LoadFeedsModeltoCore(model []Comment) []comment.CoreComment {
+	var core []comment.CoreComment
+	for _, v := range model {
+		core = append(core, v.ModelsToCore())
+	}
+	return core
+
+}
+
+type Comment struct {
+	gorm.Model
+	HomestayID uint
+	UserID     uint
+	Notes      string
+	Ratings    int
+	CreatedAt  time.Time
+	UpdatedAt  time.Time
+}
+
+func (dataModel *Comment) ModelsToCore() comment.CoreComment { //fungsi yang mengambil data dari  user gorm(model.go)  dan merubah data ke entities usercore
+	return comment.CoreComment{
+		ID:         dataModel.ID,
+		HomestayID: dataModel.HomestayID,
+		UserID:     dataModel.UserID,
+		Notes:      dataModel.Notes,
+		Ratings:    dataModel.Ratings,
+		CreatedAt:  dataModel.CreatedAt,
+		UpdatedAt:  dataModel.UpdatedAt,
+	}
 }

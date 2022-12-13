@@ -7,6 +7,7 @@ import (
 	"be13/project/utils/helper"
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/labstack/echo/v4"
 )
@@ -21,6 +22,8 @@ func NewComment(Service comment.ServiceInterface, e *echo.Echo) {
 	}
 
 	e.POST("/comment", handler.Create, middlewares.JWTMiddleware())
+	e.PUT("/comment/:id", handler.Create, middlewares.JWTMiddleware())
+	e.DELETE("/comment", handler.Create, middlewares.JWTMiddleware())
 
 }
 
@@ -55,4 +58,33 @@ func (delivery *commentDelivery) Create(c echo.Context) error {
 
 	return c.JSON(http.StatusCreated, helper.SuccessResponse("Successfully Added Comment"))
 
+}
+
+func (delivery *commentDelivery) DeleteById(c echo.Context) error {
+	id, _ := strconv.Atoi(c.Param("id"))
+	del, err := delivery.commentService.DeleteById(id) //memanggil fungsi service yang ada di folder service
+
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse("erorr Hapus data"))
+	}
+	result := CoreToRespon(del)
+	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("berhasil menghapus user", result))
+}
+
+func (delivery *commentDelivery) Update(c echo.Context) error {
+
+	id, _ := strconv.Atoi(c.Param("id"))
+
+	komenInput := CommentRequest{}
+	errBind := c.Bind(&komenInput) // menangkap data yg dikirim dari req body dan disimpan ke variabel
+	if errBind != nil {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Error binding data "+errBind.Error()))
+	}
+
+	dataCore := UserRequestToUserCore(komenInput)
+	err := delivery.commentService.UpdateComment(id, dataCore)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, helper.FailedResponse("Failed update data"+err.Error()))
+	}
+	return c.JSON(http.StatusCreated, helper.SuccessResponse("success Update data"))
 }

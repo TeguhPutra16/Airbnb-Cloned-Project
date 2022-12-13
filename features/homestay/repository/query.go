@@ -69,8 +69,17 @@ func (repo *homeStayRepository) GetAll() (data []homestay.CoreHomestay, err erro
 }
 
 // GetById implements homestay.RepositoryEntities
-func (*homeStayRepository) GetById(id int) (data homestay.CoreHomestay, err error) {
-	panic("unimplemented")
+func (repo *homeStayRepository) GetById(id int) (data homestay.CoreHomestay, err error) {
+	var home Homestay
+
+	tx := repo.db.Preload("Comments").First(&home, id)
+
+	if tx.Error != nil {
+
+		return homestay.CoreHomestay{}, tx.Error
+	}
+	gorms := home.ModelsToCore()
+	return gorms, nil
 }
 
 // GetBytime implements homestay.RepositoryEntities

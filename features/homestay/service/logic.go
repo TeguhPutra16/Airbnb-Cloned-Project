@@ -39,8 +39,9 @@ func (service *homeStayService) GetAllhomestay() (data []homestay.CoreHomestay, 
 }
 
 // GetById implements homestay.ServiceEntities
-func (*homeStayService) GetById(id int) (data homestay.CoreHomestay, err error) {
-	panic("unimplemented")
+func (service *homeStayService) GetById(id int) (data homestay.CoreHomestay, err error) {
+	data, err = service.homeStayRepository.GetById(id) // memanggil struct entities repository yang ada di entities yang berisi coding logic
+	return
 }
 
 // GetBytime implements homestay.ServiceEntities
