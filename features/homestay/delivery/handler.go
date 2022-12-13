@@ -7,6 +7,7 @@ import (
 	"be13/project/utils/helper"
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/labstack/echo/v4"
 )
@@ -66,4 +67,15 @@ func (delivery *homeStayDelivery) GetBytime(c echo.Context) error {
 	}
 	var ResponData = ListCoreToRespon(data)
 	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("berhasil membaca  user", ResponData))
+}
+
+func (delivery *homeStayDelivery) DeleteById(c echo.Context) error {
+	id, _ := strconv.Atoi(c.Param("id"))
+	del, err := delivery.homeStayService.DeleteById(id) //memanggil fungsi service yang ada di folder service
+
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse("erorr Hapus data"))
+	}
+	result := CoreToRespon(del)
+	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("berhasil menghapus user", result))
 }
