@@ -40,7 +40,7 @@ func (delivery *AuthDelivery) login(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Incorrect Password "+errPass.Error()))
 	}
 
-	data := map[string]any{
+	data := map[string]interface{}{
 		"user_id": dataUser.ID,
 		"token":   token,
 		"name":    dataUser.Name,
