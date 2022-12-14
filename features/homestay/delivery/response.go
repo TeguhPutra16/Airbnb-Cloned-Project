@@ -10,7 +10,6 @@ type HomestayRespon struct {
 	Title       string    `json:"title"`
 	Description string    `json:"description"`
 	Address     string    `json:"address"`
-	Status      string    `json:"status"`
 	AvgRate     int       `json:"avg_rate"`
 	Price       int       `json:"price"`
 	UserID      uint      `json:"user_id"`
