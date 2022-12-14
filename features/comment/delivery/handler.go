@@ -22,8 +22,8 @@ func NewComment(Service comment.ServiceInterface, e *echo.Echo) {
 	}
 
 	e.POST("/comment", handler.Create, middlewares.JWTMiddleware())
-	e.PUT("/comment/:id", handler.Create, middlewares.JWTMiddleware())
-	e.DELETE("/comment", handler.Create, middlewares.JWTMiddleware())
+	e.PUT("/comment/:id", handler.Update, middlewares.JWTMiddleware())
+	e.DELETE("/comment/:id", handler.DeleteById, middlewares.JWTMiddleware())
 
 }
 
@@ -61,9 +61,16 @@ func (delivery *commentDelivery) Create(c echo.Context) error {
 }
 
 func (delivery *commentDelivery) DeleteById(c echo.Context) error {
+	/////////////hanya bisa hapus komen sendiri////////////////////////////////////////////
+	userIdtoken := middlewares.ExtractTokenUserId(c)
+	log.Println("user_id_token", userIdtoken)
 	id, _ := strconv.Atoi(c.Param("id"))
 	del, err := delivery.commentService.DeleteById(id) //memanggil fungsi service yang ada di folder service
+	log.Println("user_id_comment", del.UserID)
+	if del.UserID != uint(userIdtoken) {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse("tidak bisa hapus selain komen sendri"))
 
+	}
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("erorr Hapus data"))
 	}

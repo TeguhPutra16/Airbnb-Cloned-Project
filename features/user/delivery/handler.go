@@ -5,6 +5,7 @@ import (
 	"be13/project/features/user"
 	"be13/project/middlewares"
 	"be13/project/utils/helper"
+	"log"
 	"net/http"
 	"strconv"
 
@@ -89,9 +90,13 @@ func (delivery *UserDeliv) Update(c echo.Context) error {
 	return c.JSON(http.StatusCreated, helper.SuccessResponse("success Update data"))
 }
 func (delivery *UserDeliv) DeleteById(c echo.Context) error {
+	userIdtoken := middlewares.ExtractTokenUserId(c)
+	log.Println("user_id_token", userIdtoken)
 	id, _ := strconv.Atoi(c.Param("id"))
 	del, err := delivery.UserService.DeleteById(id) //memanggil fungsi service yang ada di folder service
-
+	if id != userIdtoken {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse("erorr hanya bisa hapus akun sendiri"))
+	}
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("erorr Hapus data"))
 	}
