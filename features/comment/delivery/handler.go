@@ -22,7 +22,7 @@ func NewComment(Service comment.ServiceInterface, e *echo.Echo) {
 	}
 
 	e.POST("/comment", handler.Create, middlewares.JWTMiddleware())
-	e.PUT("/comment/:id", handler.Create, middlewares.JWTMiddleware())
+	e.PUT("/comment/:id", handler.Update, middlewares.JWTMiddleware())
 	e.DELETE("/comment", handler.Create, middlewares.JWTMiddleware())
 
 }

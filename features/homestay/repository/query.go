@@ -22,9 +22,9 @@ func NewHome(db *gorm.DB) homestay.RepositoryEntities { // user.repository mengi
 // Create implements homestay.RepositoryEntities
 func (repo *homeStayRepository) Create(input homestay.CoreHomestay) error {
 
-	userGorm := FromCore(input) //dari gorm model ke user core yang ada di entities
+	home := FromCore(input) //dari gorm model ke user core yang ada di entities
 
-	tx := repo.db.Create(&userGorm) // proses insert data
+	tx := repo.db.Create(&home) // proses insert data
 
 	if tx.Error != nil {
 		return tx.Error
@@ -32,6 +32,15 @@ func (repo *homeStayRepository) Create(input homestay.CoreHomestay) error {
 	if tx.RowsAffected == 0 {
 		return errors.New("insert failed")
 	}
+
+	user := User{}
+	user.Status = "Hosting"
+
+	tx1 := repo.db.Model(&user).Where("id = ?", input.UserID).Updates(&user)
+	if tx1.RowsAffected == 0 {
+		return errors.New("error update role")
+	}
+
 	return nil
 }
 
