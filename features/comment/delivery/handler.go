@@ -75,7 +75,7 @@ func (delivery *commentDelivery) DeleteById(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("erorr Hapus data"))
 	}
 	result := CoreToRespon(del)
-	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("berhasil menghapus user", result))
+	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("berhasil menghapus comment", result))
 }
 
 func (delivery *commentDelivery) Update(c echo.Context) error {
@@ -89,9 +89,16 @@ func (delivery *commentDelivery) Update(c echo.Context) error {
 	}
 
 	dataCore := UserRequestToUserCore(komenInput)
+	userIdtoken := middlewares.ExtractTokenUserId(c)
+	log.Println("user_id_token", userIdtoken)
+
+	if dataCore.UserID != uint(userIdtoken) {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse("hanya bisa update comment sendiri "))
+
+	}
 	err := delivery.commentService.UpdateComment(id, dataCore)
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, helper.FailedResponse("Failed update data"+err.Error()))
+		return c.JSON(http.StatusInternalServerError, helper.FailedResponse("Failed update komentar"+err.Error()))
 	}
-	return c.JSON(http.StatusCreated, helper.SuccessResponse("success Update data"))
+	return c.JSON(http.StatusCreated, helper.SuccessResponse("success Update Comment"))
 }

@@ -3,7 +3,6 @@ package repository
 import (
 	"be13/project/features/user"
 	"errors"
-	"time"
 
 	"gorm.io/gorm"
 )
@@ -49,11 +48,6 @@ func (repo *userRepository) GetAll() (data []user.CoreUser, err error) {
 func (repo *userRepository) Update(id int, input user.CoreUser) error {
 	userGorm := FromUserCore(input)
 
-	if userGorm.UpdatedAt != (time.Time{}) {
-		userGorm.Status = "Not-Active"
-	} else {
-		userGorm.Status = "Active"
-	}
 	tx := repo.db.Model(&userGorm).Where("id = ?", id).Updates(&userGorm)
 
 	if tx.Error != nil {
