@@ -74,8 +74,17 @@ func (delivery *homeStayDelivery) GetBytime(c echo.Context) error {
 }
 
 func (delivery *homeStayDelivery) DeleteById(c echo.Context) error {
+
+	userIdtoken := middlewares.ExtractTokenUserId(c)
+	log.Println("user_id_token", userIdtoken)
 	id, _ := strconv.Atoi(c.Param("id"))
 	del, err := delivery.homeStayService.DeleteById(id) //memanggil fungsi service yang ada di folder service
+	log.Println("user_id_comment", del.UserID)
+	if del.UserID != uint(userIdtoken) {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse("tidak bisa hapus selain komen sendri"))
+
+	}
+	//memanggil fungsi service yang ada di folder service
 
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("erorr Hapus data"))

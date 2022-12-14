@@ -61,6 +61,7 @@ func (delivery *commentDelivery) Create(c echo.Context) error {
 }
 
 func (delivery *commentDelivery) DeleteById(c echo.Context) error {
+	/////////////hanya bisa hapus komen sendiri////////////////////////////////////////////
 	userIdtoken := middlewares.ExtractTokenUserId(c)
 	log.Println("user_id_token", userIdtoken)
 	id, _ := strconv.Atoi(c.Param("id"))
