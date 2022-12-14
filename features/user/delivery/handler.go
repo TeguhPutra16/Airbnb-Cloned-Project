@@ -75,6 +75,13 @@ func (delivery *UserDeliv) Update(c echo.Context) error {
 	// 	return c.JSON(http.StatusUnauthorized, helper.PesanGagalHelper("tidak bisa diakses khusus admin!!!"))
 	// }
 	id, _ := strconv.Atoi(c.Param("id"))
+	userIdtoken := middlewares.ExtractTokenUserId(c)
+	log.Println("user_id_token", userIdtoken)
+
+	if id != userIdtoken {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse("hanya bisa update data sendiri "))
+
+	}
 
 	userInput := UserRequest{}
 	errBind := c.Bind(&userInput) // menangkap data yg dikirim dari req body dan disimpan ke variabel
@@ -83,6 +90,7 @@ func (delivery *UserDeliv) Update(c echo.Context) error {
 	}
 
 	dataCore := UserRequestToUserCore(userInput)
+
 	err := delivery.UserService.Update(id, dataCore)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, helper.FailedResponse("Failed update data"+err.Error()))
