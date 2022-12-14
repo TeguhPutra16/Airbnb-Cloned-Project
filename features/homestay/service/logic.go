@@ -45,10 +45,6 @@ func (service *homeStayService) GetById(id int) (data homestay.CoreHomestay, err
 }
 
 // GetBytime implements homestay.ServiceEntities
-func (service *homeStayService) GetBytime(start string, end string) (data []homestay.CoreHomestay, err error) {
-	data, err = service.homeStayRepository.GetBytime(start, end)
-	return data, err
-}
 
 // Update implements homestay.ServiceEntities
 func (service *homeStayService) Update(id int, input homestay.CoreHomestay) error {
@@ -58,4 +54,10 @@ func (service *homeStayService) Update(id int, input homestay.CoreHomestay) erro
 	}
 
 	return nil
+}
+
+// GethHomestaybyidUser implements homestay.ServiceEntities
+func (service *homeStayService) GethHomestaybyidUser(user_id int) (data []homestay.CoreHomestay, err error) {
+	data, err = service.homeStayRepository.GethHomestaybyidUser(user_id)
+	return data, err
 }

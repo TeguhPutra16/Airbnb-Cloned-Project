@@ -10,7 +10,6 @@ type CoreHomestay struct {
 	Title       string
 	Description string
 	Address     string
-	Status      string
 	AvgRate     int
 	Price       int
 	UserID      uint
@@ -24,7 +23,7 @@ type ServiceEntities interface {
 	Create(input CoreHomestay) (err error)
 	Update(id int, input CoreHomestay) error
 	GetById(id int) (data CoreHomestay, err error)
-	GetBytime(start, end string) (data []CoreHomestay, err error)
+	GethHomestaybyidUser(user_id int) (data []CoreHomestay, err error)
 	DeleteById(id int) (CoreHomestay, error)
 }
 
@@ -33,6 +32,6 @@ type RepositoryEntities interface {
 	Create(input CoreHomestay) (err error)
 	Update(id int, input CoreHomestay) error
 	GetById(id int) (data CoreHomestay, err error)
-	GetBytime(start, end string) (data []CoreHomestay, err error)
+	GethHomestaybyidUser(user_id int) (data []CoreHomestay, err error)
 	DeleteById(id int) (CoreHomestay, error)
 }
