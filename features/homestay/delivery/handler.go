@@ -104,6 +104,13 @@ func (delivery *homeStayDelivery) Update(c echo.Context) error {
 	}
 
 	dataCore := UserRequestToUserCore(homeInput)
+	userIdtoken := middlewares.ExtractTokenUserId(c)
+	log.Println("user_id_token", userIdtoken)
+
+	if dataCore.UserID != uint(userIdtoken) {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse("hanya bisa update data sendiri "))
+
+	}
 	err := delivery.homeStayService.Update(id, dataCore)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, helper.FailedResponse("Failed update data"+err.Error()))
