@@ -86,3 +86,15 @@ func (dataModel *Comment) ModelsToCore() comment.CoreComment { //fungsi yang men
 		UpdatedAt:  dataModel.UpdatedAt,
 	}
 }
+
+type User struct {
+	gorm.Model
+	Name      string `gorm:"type:varchar(50)"`
+	Password  string `gorm:"type:varchar(500)"`
+	Email     string
+	Address   string
+	Status    string
+	Role      string
+	Homestays []Homestay
+	Comments  []Comment
+}

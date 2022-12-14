@@ -88,7 +88,35 @@ func (*commentRepository) GetById(id int) (data comment.CoreComment, err error) 
 
 // UpdateComment implements comment.RepositoryInterface
 func (repo *commentRepository) UpdateComment(id int, input comment.CoreComment) error {
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////
+	komen1 := Comment{}
+	txres := repo.db.Where("id=?", id).Find(&komen1)
+	if txres.Error != nil {
+		return txres.Error
+	}
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	var commentModel []Comment
+
+	repo.db.Where("homestay_id=?", komen1.HomestayID).Find(&commentModel)
+
+	jumData := len(commentModel)
+	log.Println("jumData waktu update", jumData)
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	homes := repository.Homestay{}
+	repo.db.First(&homes, komen1.HomestayID)
+	////////////////////////////////////////proses update data avgrating homestay ketika comment ditambahkan/////////////////////////////////////////////////////////////////////////////////////////////
+	home := repository.Homestay{}
+	home.AvgRate = ((homes.AvgRate * jumData) - komen1.Ratings + input.Ratings) / jumData
+
+	tx2 := repo.db.Model(&home).Where("id = ?", komen1.HomestayID).Updates(&home)
+
+	if tx2.Error != nil {
+		return tx2.Error
+	}
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	komen := FromCore(input)
+	input.HomestayID = komen1.HomestayID
 
 	tx := repo.db.Model(&komen).Where("id = ?", id).Updates(&komen)
 
