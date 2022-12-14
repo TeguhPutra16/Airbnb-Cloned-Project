@@ -1,0 +1,983 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: API Air Bnb
+  description: API Air Bnb Group Project 5
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/HERIBUDIYANA/Air-Bnb/1.0.0
+tags:
+  - name: Login
+    description: Login as Users or Hosting
+  - name: Users
+    description: Management Users
+  - name: Homestay & Hosting
+    description: Management Homestay
+  - name: Reserve
+    description: Reserve The Homestays
+
+paths:
+  /login:
+    post:
+      tags:
+        - "Login"
+      summary: Login User
+      description: Login User
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLoginReq'
+            example:
+                  email: "hery@gmail.com"
+                  password: "asdfqwer"
+      responses:
+        '200':
+            $ref: '#/components/responses/successLogin'
+        '400':
+            $ref: '#/components/responses/failedRespon'
+        '500':
+            $ref: '#/components/responses/failedRespon500'
+  /users:
+      post:
+        tags:
+          - "Users"
+        summary: Register New Users
+        description: User Register
+        # security:
+        #   - JWTAuth: []
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserBodyRequest'
+              examples:
+                register:
+                  description: User 1 Register New Users
+                  value:
+                    name: "Herry"
+                    email: "hery@gmail.com"
+                    password: "asdfqwer"
+                    address: jl. keadilan no. 11 - Jakarta
+                    role: Admin
+        responses:
+          '201':
+            $ref: '#/components/responses/getProfileUser'
+          '400':
+              $ref: '#/components/responses/failedRespon'
+          '500':
+              $ref: '#/components/responses/failedRespon500'  
+      get:
+        tags:
+          - "Users"
+        summary: Get All User
+        description: Get all user and hosting
+        # security:
+        #   - JWTAuth: []
+        responses:
+          '200':
+            description: Success get all users
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    "message":
+                      type: string
+                    "data":
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          name:
+                            type: string
+                          role:
+                            type: string
+                          address:
+                            type: string
+                  example:
+                    message: success get all users
+                    data:
+                      - id : 1
+                        name : Hery
+                        role : Admin
+                        address : jl. Keadilan No.11 - Jakarta
+                      - id : 2
+                        name : Teguh
+                        role : Hosting
+                        address : jl. Merpati No.33 - Surabaya
+          '400':
+            $ref: '#/components/responses/failedRespon'
+          '500':
+            $ref: '#/components/responses/failedRespon500'
+  /users/{id_user}:
+    put:
+      tags:
+        - "Users"
+      summary: Update Users
+      description: Update Users
+      security:
+        - JWTAuth: []
+      parameters: 
+        - in: path
+          name: id_user
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AdminUpdateRequest'
+            example:
+              name: Hery
+              images: hery-depok.jpg
+              email: hery@gmail.id
+              password: Asdf123
+              role: Admin
+              address: Jl. Keadilan No.11 - Jakarta
+      responses:
+        '200':
+          $ref: '#/components/responses/successUpdate'
+        '400':
+          $ref: '#/components/responses/failedRespon'
+        '500':
+          $ref: '#/components/responses/failedRespon500'
+    delete:
+      tags:
+        - "Users"
+      summary: Delete User Account
+      description: Menghapus akun user oleh admin
+      security:
+        - JWTAuth: []
+      parameters:
+      - in: path
+        required: true
+        name: id_user
+        schema:
+          type: integer
+      responses:
+        '200':
+          $ref: '#/components/responses/successDelete'
+        '400':
+          $ref: '#/components/responses/failedRespon'
+        '500':
+          $ref: '#/components/responses/failedRespon500'     
+    get:
+      tags:
+        - "Users"
+      summary: Get Profile Other User
+      description: Get Profile User
+      security:
+        - JWTAuth: []
+      parameters:
+        - in: path
+          name: id_user
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          $ref: '#/components/responses/getProfileUser'
+        '400':
+          $ref: '#/components/responses/failedRespon'
+        '500':
+          $ref: '#/components/responses/failedRespon500'
+  /homestays:
+    post:
+      tags:
+          - "Homestay & Hosting"
+      summary: Add New Homestay
+      description: Add Homestay , only posted by hosting
+      security:
+        - JWTAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+              schema:
+                $ref: '#/components/schemas/HomestayBodyRequest'
+              example:
+                title: "Villa Merapi"
+                description: "2 bathroom, 6 bedroom, 1 kicthen, view of the mountains"
+                price: 18000000
+                status: Avaliable
+                address: jl. sleman no. 11 - Jogjakarta
+                images:
+                  - Merapi.jpg
+                  - Villa.jpg
+                  - homestay.jpg
+      responses:
+        '201': 
+         $ref: '#/components/responses/responses201'
+        '400':
+              $ref: '#/components/responses/failedRespon'
+        '500':
+              $ref: '#/components/responses/failedRespon500' 
+    get:
+      tags:
+        - "Homestay & Hosting"
+      summary: Get Homestay
+      description: Get all Homestay
+      responses:
+          '200':
+            description: Success get all users
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    "message":
+                      type: string
+                    "data":
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          title:
+                            type: string
+                          price:
+                            type: integer
+                          status:
+                            type: string
+                          description:
+                            type: string
+                          address:
+                            type: string
+                          ratting:
+                            type: integer
+                  example:
+                    message: success get all Homestay
+                    data:
+                      - id : 1
+                        title: "Villa Merapi"
+                        description: "2 bathroom, 6 bedroom, 1 kicthen, view of the mountains"
+                        price: 18000000
+                        address: jl. sleman no. 11 - Jogjakarta
+                        status: Avaliable
+                        ratting: 4.7
+                        images:
+                        - Merapi.jpg
+                        - Villa.jpg
+                        - homestay.jpg
+                      - id : 2
+                        title: "Villa Lebak Banten"
+                        description: "2 bathroom, 4 bedroom, 1 kicthen, view of the sea"
+                        price: 3000000
+                        address: jl. Lebak banten no. 33 - Banten
+                        status: Avaliable
+                        ratting: 4.8
+                        images:
+                        - sea.jpg
+                        - Villa.jpg
+                        - homestay.jpg
+                      - id : 122
+                        title: "Villa Surya Kencana"
+                        description: "2 bathroom, 2 bedroom, 1 kicthen, view of the forest"
+                        price: 3000000
+                        address: jl. Cisarua - Bogor
+                        status: Not Avaliable
+                        ratting: 4.8
+                        images:
+                        - forest.jpg
+                        - image.jpg
+                        - kencana.jpg
+          '400':
+              $ref: '#/components/responses/failedRespon'
+          '500':
+              $ref: '#/components/responses/failedRespon500' 
+  /homestays/{id}:
+    get: 
+      tags:
+        - "Homestay & Hosting"
+      summary: Get Detail Homestay
+      description: Get Detail Homestay For Reserve
+      security:
+        - JWTAuth: []
+      parameters: 
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+          '200':
+            $ref: '#/components/responses/DetailHomestay'
+          '400':
+            $ref: '#/components/responses/failedRespon'
+          '500':
+            $ref: '#/components/responses/failedRespon500'
+      
+    put:
+      tags:
+        - "Homestay & Hosting"
+      summary: Update Homestay
+      description: Update Your Homestay
+      security:
+        - JWTAuth: []
+      parameters: 
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema: 
+              $ref: '#/components/schemas/UpdateHomestay'
+            example:
+              title: "Villa Bumi Pertiwi"
+              description: "2 Bedroom, 1 bathroom, 1 kicthen, 1 swimming pool"
+              price: 2500000
+              status: Avaliable
+              images: 
+                - image.jpg
+                - swimming.jpg
+                - bedroom.jpg
+      responses:
+        '200':
+          $ref: '#/components/responses/successUpdate'
+        '400':
+          $ref: '#/components/responses/failedRespon'
+        '500':
+          $ref: '#/components/responses/failedRespon500'
+    delete:
+      tags:
+        - "Homestay & Hosting"
+      summary: Delete Homestay
+      description: Delete Your Homestay
+      security:
+        - JWTAuth: []
+      parameters: 
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          $ref: '#/components/responses/successDelete'
+        '400':
+          $ref: '#/components/responses/failedRespon'
+        '500':
+          $ref: '#/components/responses/failedRespon500' 
+  /reserves:
+    post:
+      tags:
+        - "Reserve"
+      summary: Booking Homestay
+      description: reserve homestay
+      security:
+        - JWTAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReserveReqBody'
+            examples:
+              reserve1:
+                description: Reserve
+                value:
+                  homestay_id: 1
+                  checkin: 2017-07-21
+                  checkout: 2017-07-22
+              reserve2:
+                description: Reserve
+                value:
+                  homestay_id: 13
+                  checkin: 2017-07-23
+                  checkout: 2017-07-27
+      responses:
+        '200':
+          $ref: '#/components/responses/SuccessReserve'
+        '400':
+          $ref: '#/components/responses/failedRespon'
+        '500':
+          $ref: '#/components/responses/failedRespon500'
+  /orders:
+    post:
+      tags:
+        - "Reserve"
+      summary: Checkout
+      security:
+        - JWTAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema: 
+              $ref: '#'
+            example:
+              reserve_id: 2 , 3
+              payment: 
+                payment_name: "Mastercard"
+                card_number: "1111-2222-3333-4444"
+                payment_code: "2999"
+      responses:
+        '200':
+            $ref: '#/components/responses/responsesCheckoutSuccess'
+        '400':
+          $ref: '#/components/responses/failedRespon'
+        '500':
+          $ref: '#/components/responses/failedRespon500'
+  /orders/{id}/confirm:
+    put:
+      tags:
+        - "Reserve"
+      summary: confirm order
+      description: confirm your order
+      security:
+        - JWTAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses: 
+        '200':
+          $ref: '#/components/responses/successConfirm'
+        '400':
+          $ref: '#/components/responses/failedRespon'
+        '500':
+          $ref: '#/components/responses/failedRespon500'
+  /orders/{id}/cancel:
+    put:
+      tags:
+        - "Reserve"
+      summary: Cancel Order
+      description: Cancel your Order
+      security:
+        - JWTAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses: 
+        '200':
+          $ref: '#/components/responses/OrderCancelled'
+        '400':
+          $ref: '#/components/responses/failedRespon'
+        '500':
+          $ref: '#/components/responses/failedRespon500'
+  /trips:
+    get:
+      tags:
+        - "Trip"
+      summary: Get Trip History
+      security:
+        - JWTAuth: []
+      parameters: []
+      
+      responses:
+        "200":
+          description: Success Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      id_homestay:
+                        type: integer
+                      title:
+                        type: string
+                      checkin:
+                        type: string
+                        format: date
+                      checkout:
+                        type: string
+                        format: date
+                      status:
+                        type: string
+                      total_price:
+                        type: integer
+              example:
+                message: Success Get Trip History
+                data:
+                  - id_homestay: 1
+                    title: Villa Mutiara
+                    checkin: 2022-12-13
+                    checkout: 2022-12-14
+                    total_price: 4000000
+                    status: confirmed
+                  - id_homestay: 3
+                    title: Villa Gunung Mas
+                    checkin: 2022-12-18
+                    checkout: 2022-12-20
+                    total_price: 6000000
+                    status: cancelled
+                  - id_homestay: 6
+                    title: Cisarua Residence
+                    checkin: 2023-01-22
+                    checkout: 2023-01-24
+                    total_price: 8000000
+                    status: confirmed
+        '400':
+          $ref: '#/components/responses/failedRespon'
+        '500':
+          $ref: '#/components/responses/failedRespon500'
+  /rattings/{id_homestay}:
+    post:
+      tags:
+        - "Trip"
+      summary: Add Ratting And Comment
+      description: Add Ratting And Comment Your Trip
+      security:
+        - JWTAuth: []
+      parameters:
+        - in: path
+          name: id_homestay
+          schema:
+            type: integer
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RattingsRequest'
+            example:
+              id_homestay: 1
+              stars: 5
+              comments: "viewsnya keren banget rekomen buat kalian"
+      responses:
+        '200':
+          $ref: '#/components/responses/SuccessRattings'
+        '400':
+          $ref: '#/components/responses/failedRespon'
+        '500':
+          $ref: '#/components/responses/failedRespon500'
+
+      
+
+     
+        
+
+
+
+components:
+  securitySchemes:
+    JWTAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    ReserveReqBody:
+      type: object
+      properties:
+        homestay_id:
+          type: integer
+          format: number
+        checkin:
+          type: string
+          format: date
+        checkout:
+          type: string
+          format: date
+    UserLoginReq:
+      type: object
+      properties:
+        "email":
+          type: string
+          minLength: 1
+        "password":
+          type: string
+          format: password
+    AdminUpdateRequest:
+      type: object
+      properties:
+        "name":
+          type: string
+          minLength: 3
+        "email":
+          type: string
+          minLength: 3
+        "password":
+          type: string
+          format: password
+          minLength: 3
+        "images":
+          type: string
+        "role":
+          type: string
+        "address":
+          type: string
+    RattingsRequest:
+      type: object
+      properties:
+        id_homestay:
+          type: integer
+        stars:
+          type: integer
+        comments:
+          type: string
+    UpdateHomestay:
+      type: object
+      properties:
+        "title":
+          type: string
+          minLength: 3
+        "description":
+          type: string
+          minLength: 3
+        "price":
+          type: integer
+          minLength: 3
+        "images":
+          type: string
+        "status":
+          type: string
+        "address":
+          type: string
+    UserBodyRequest:
+      type: object
+      properties:
+        "name":
+          type: string
+          minLength: 1
+        "email":
+          type: string
+          minLength: 1
+        "password":
+          type: string
+          minLength: 1
+          format: password
+        "role":
+          type: string
+          minLength: 1
+        "address":
+          type: string
+          minLength: 1
+    HomestayBodyRequest:
+      type: object
+      properties:
+        "title":
+          type: string
+          minLength: 1
+        "images":
+          type: string
+          minLength: 1
+        "description":
+          type: string
+          minLength: 1
+        "price":
+          type: integer
+          minLength: 1
+        "address":
+          type: string
+          minLength: 1
+        "status":
+          type: string
+          minLength: 1
+    UserUpdateProfile:
+      type: object
+      properties:
+        "name":
+          type: string
+          minLength: 3
+        "email":
+          type: string
+          minLength: 3
+        "password":
+          type: string
+          format: password
+          minLength: 3
+        "images":
+          type: string
+
+
+  responses:
+    successRegister:
+      description: Success Register New Users
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Register Success
+              data:
+                type: object
+                example:
+                  "id": 1
+                  "name": "Hery"
+                  "email" : "hery@gmail.com"
+                  "role": "Mentee"
+                  "class": "back-end"
+    successDelete:
+      description: Success Delete
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Delete Success
+    failedRespon:
+      description: Status Response Failed
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: invalid input from client
+    failedRespon500:
+      description: Status Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Internal Server Error
+    successRespon:
+      description: Status Response Success
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Success
+    responses201:
+      description: Status Created Success
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Success Created
+    SuccessReserve:
+      description: Success Add to Reserve
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message: 
+                type: string
+                example: Success Add To Reserve
+    successLogin:
+      description: Success Login
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Success Login User
+              data:
+                type: object
+                properties:
+                  # id:
+                  #   type: integer
+                  #   example: 1
+                  # name:
+                  #   type: string
+                  #   example: Hery
+                  # role:
+                  #   type: string
+                  #   example: admin
+                  token:
+                    type: string
+                    example: eyJjlcmnjen.jiyYdjoLjsjbcnejg$bvklsd.LSDmcuvuvdbk
+    successUpdate:
+      description: Success Update
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Update Success
+    respon201:
+      description: Success create
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: success create
+    SuccessRattings:
+      description: Success Add Ratting
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Success Add Ratting
+    getProfileUser: 
+      description: Success Get profile
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+              data:
+                type: object
+                properties:
+                  id_user:
+                    type: integer
+                  images:
+                    type: string
+                  name:
+                    type: string
+                  address: 
+                    type: string
+                  role:
+                    type: string
+          example:
+            message: Success Get Profile
+            data:
+              id_user: 1
+              name: "Herry"
+              images: "images.jpg"
+              address: "Jl. Keadilan No.11 - Jakarta"
+              role: "Admin"
+    DetailHomestay: 
+      description: Success Get Detail
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+              data:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  title:
+                    type: string
+                  price:
+                    type: integer
+                  description:
+                    type: string
+                  address: 
+                    type: string
+                  status:
+                    type: string
+                  ratting:
+                    type: integer
+                  images:
+                    type: string
+                  comments:
+                    type: object
+                    properties:
+                      user_id:
+                        type: integer
+                      caption:
+                        type: string
+          example:
+            message: Success Get Detail
+            data:
+              id: 1
+              title: "Villa Merapi"
+              description: "1 bathroom, 3 bedroom, 1 pool, 1 kitchen , 1 music studio"
+              address: "Jl. Sleman No.11 - Jogjakarta"
+              price: 1000000
+              ratting: 4.9
+              images:
+                - image.jpg
+                - pool.jpg
+                - Villa.jpg
+              comments:
+                - user_id: 22
+                  caption: "keren banget tempatnya"
+                - user_id: 300
+                  caption: "cocok buat kumpul keluarga"
+                - user_id: 211
+                  caption: "pas buat family gathering"
+    AdminUpdateProfile: 
+      description: Success Update profile
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+              data:
+                type: object
+                properties:
+                  id_user:
+                    type: integer
+                  email:
+                    type: string
+                  name:
+                    type: string
+                  images:
+                    type: string
+          example:
+            message: success update profile
+            data:
+              id_user: 1
+              name: "Hery"
+              email: "hery@gmail.com"
+              images: "images.jpg"
+    responsesCheckoutSuccess:
+      description: Status Checkout Success
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Success Checkout Please Confirm
+    successConfirm:
+      description: Success Confirm
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Order Confirmed
+    OrderCancelled:
+      description: Success Order Cancellerd
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Order Cancelled
+    
+   
+    
