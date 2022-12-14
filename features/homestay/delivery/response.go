@@ -24,7 +24,6 @@ func CoreToRespon(dataCore homestay.CoreHomestay) HomestayRespon { // data user 
 		Title:       dataCore.Title,
 		Description: dataCore.Description,
 		Address:     dataCore.Address,
-		Status:      dataCore.Status,
 		AvgRate:     dataCore.AvgRate,
 		Price:       dataCore.Price,
 		UserID:      dataCore.UserID,

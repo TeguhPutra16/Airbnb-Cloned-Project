@@ -14,7 +14,6 @@ type Homestay struct {
 	Title       string
 	Description string
 	Address     string
-	Status      string
 	AvgRate     int
 	Price       int
 	UserID      uint
@@ -26,7 +25,6 @@ func FromCore(dataCore homestay.CoreHomestay) Homestay { //fungsi yang mengambil
 		Title:       dataCore.Title,
 		Description: dataCore.Description,
 		Address:     dataCore.Address,
-		Status:      dataCore.Status,
 		AvgRate:     dataCore.AvgRate,
 		Price:       dataCore.Price,
 		UserID:      dataCore.UserID,
@@ -39,7 +37,6 @@ func (dataModel *Homestay) ModelsToCore() homestay.CoreHomestay { //fungsi yang 
 		Title:       dataModel.Title,
 		Description: dataModel.Description,
 		Address:     dataModel.Address,
-		Status:      dataModel.Status,
 		AvgRate:     dataModel.AvgRate,
 		Price:       dataModel.Price,
 		UserID:      dataModel.UserID,

@@ -45,8 +45,9 @@ func (service *UserService) GetAll() (data []user.CoreUser, err error) {
 
 // Update implements user.ServiceEntities
 func (service *UserService) Update(id int, input user.CoreUser) error {
-	input.Password = user.Bcript(input.Password)
+
 	errUpdate := service.userRepository.Update(id, input)
+
 	if errUpdate != nil {
 		return errors.New("GAGAL mengupdate data , QUERY ERROR")
 	}

@@ -21,11 +21,11 @@ func New(Service user.ServiceEntities, e *echo.Echo) {
 		UserService: Service,
 	}
 
-	e.POST("/user", handler.Create)
-	e.GET("/user", handler.GetAll, middlewares.JWTMiddleware())
-	e.PUT("/user/:id", handler.Update, middlewares.JWTMiddleware())
-	e.DELETE("/user/:id", handler.DeleteById, middlewares.JWTMiddleware())
-	e.GET("/user/:id", handler.GetById, middlewares.JWTMiddleware())
+	e.POST("/users", handler.Create)
+	e.GET("/users", handler.GetAll, middlewares.JWTMiddleware())
+	e.PUT("/users/:id", handler.Update, middlewares.JWTMiddleware())
+	e.DELETE("/users/:id", handler.DeleteById, middlewares.JWTMiddleware())
+	e.GET("/users/:id", handler.GetById, middlewares.JWTMiddleware())
 
 }
 func (delivery *UserDeliv) Create(c echo.Context) error {

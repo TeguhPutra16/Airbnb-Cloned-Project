@@ -3,7 +3,6 @@ package repository
 import (
 	"be13/project/features/homestay"
 	"errors"
-	"time"
 
 	"gorm.io/gorm"
 )
@@ -92,30 +91,6 @@ func (repo *homeStayRepository) GetById(id int) (data homestay.CoreHomestay, err
 }
 
 // GetBytime implements homestay.RepositoryEntities
-func (repo *homeStayRepository) GetBytime(start string, end string) (data []homestay.CoreHomestay, err error) {
-	var home []Homestay
-	checkIn, errConvtime1 := time.Parse("02/01/2006", start)
-	if errConvtime1 != nil {
-		return nil, errConvtime1
-	}
-	checkOut, errConvtime2 := time.Parse("02/01/2006", end)
-	if errConvtime2 != nil {
-		return nil, errConvtime2
-	}
-
-	tx := repo.db.Where("status=? AND created_at BETWEEN ? AND ?", "Available", checkIn, checkOut).Find(&home) //start dan end harus di convert dulu
-	if tx.Error != nil {
-		return nil, tx.Error
-	}
-
-	if tx.RowsAffected == 0 {
-		return nil, errors.New("login failed")
-	}
-
-	var DataCore = ListModelTOCore(home) //mengambil data dari gorm model(file repository(model.go))
-
-	return DataCore, nil
-}
 
 // Update implements homestay.RepositoryEntities
 func (repo *homeStayRepository) Update(id int, input homestay.CoreHomestay) error {
@@ -128,4 +103,17 @@ func (repo *homeStayRepository) Update(id int, input homestay.CoreHomestay) erro
 	}
 
 	return nil
+}
+
+// GethHomestaybyidUser implements homestay.RepositoryEntities
+func (repo *homeStayRepository) GethHomestaybyidUser(user_id int) (data []homestay.CoreHomestay, err error) {
+	var home []Homestay //mengambil data gorm model(model.go)
+	tx := repo.db.Where("user_id=?", user_id).Find(&home)
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+
+	var DataCore = ListModelTOCore(home) //mengambil data dari gorm model(file repository(model.go))
+
+	return DataCore, nil
 }

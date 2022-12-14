@@ -46,7 +46,21 @@ func (repo *userRepository) GetAll() (data []user.CoreUser, err error) {
 
 }
 func (repo *userRepository) Update(id int, input user.CoreUser) error {
+	var users User
+
+	tx1 := repo.db.First(&users, id)
+
+	if tx1.Error != nil {
+
+		return tx1.Error
+	}
+
+	if input.Password == "" {
+		input.Password = users.Password
+	}
+
 	userGorm := FromUserCore(input)
+	input.Password = user.Bcript(input.Password)
 
 	tx := repo.db.Model(&userGorm).Where("id = ?", id).Updates(&userGorm)
 

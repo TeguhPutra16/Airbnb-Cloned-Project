@@ -20,12 +20,12 @@ func NewHome(Service homestay.ServiceEntities, e *echo.Echo) {
 		homeStayService: Service,
 	}
 
-	e.POST("/homestay", handler.Create, middlewares.JWTMiddleware())
+	e.POST("/homestays", handler.Create, middlewares.JWTMiddleware())
 	e.GET("/homestays", handler.GetAllhomestay, middlewares.JWTMiddleware())
-	e.PUT("/homestay/:id", handler.Update, middlewares.JWTMiddleware())
-	e.GET("/homestay/:id", handler.GetById, middlewares.JWTMiddleware())
-	e.DELETE("/homestay/:id", handler.DeleteById, middlewares.JWTMiddleware())
-	e.GET("/homestay", handler.GetBytime, middlewares.JWTMiddleware())
+	e.PUT("/homestays/:id", handler.Update, middlewares.JWTMiddleware())
+	e.GET("/homestays/:id", handler.GetById, middlewares.JWTMiddleware())
+	e.GET("/homestays/user", handler.GetUserHomestay, middlewares.JWTMiddleware())
+	e.DELETE("/homestays/:id", handler.DeleteById, middlewares.JWTMiddleware())
 
 }
 
@@ -47,7 +47,6 @@ func (delivery *homeStayDelivery) Create(c echo.Context) error {
 
 	dataCore := UserRequestToUserCore(homestayReq)
 
-	dataCore.Status = "Available"
 	dataCore.UserID = uint(userIdtoken)
 
 	errResult := delivery.homeStayService.Create(dataCore)
@@ -57,20 +56,6 @@ func (delivery *homeStayDelivery) Create(c echo.Context) error {
 
 	return c.JSON(http.StatusCreated, helper.SuccessResponse("Successfully Added Home Stay"))
 
-}
-
-func (delivery *homeStayDelivery) GetBytime(c echo.Context) error {
-	start := c.QueryParam("start")
-
-	end := c.QueryParam("end")
-
-	data, err := delivery.homeStayService.GetBytime(start, end)
-
-	if err != nil {
-		return c.JSON(http.StatusBadRequest, helper.FailedResponse("erorr read data"))
-	}
-	var ResponData = ListCoreToRespon(data)
-	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("berhasil membaca  user", ResponData))
 }
 
 func (delivery *homeStayDelivery) DeleteById(c echo.Context) error {
@@ -139,4 +124,18 @@ func (delivery *homeStayDelivery) GetById(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("berhasil membaca ruangan dan commentnya", result))
+}
+
+func (delivery *homeStayDelivery) GetUserHomestay(c echo.Context) error {
+	userIdtoken := middlewares.ExtractTokenUserId(c)
+	log.Println("user_id_token", userIdtoken)
+
+	result, err := delivery.homeStayService.GethHomestaybyidUser(userIdtoken) //memanggil fungsi service yang ada di folder service
+
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse("erorr read data"))
+	}
+	var ResponData = ListCoreToRespon(result)
+	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("berhasil membaca homestay dari user", ResponData))
+
 }
