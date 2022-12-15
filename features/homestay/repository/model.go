@@ -14,7 +14,7 @@ type Homestay struct {
 	Title       string
 	Description string
 	Address     string
-	AvgRate     int
+	AvgRate     float64
 	Price       int
 	UserID      uint
 	Images      string
