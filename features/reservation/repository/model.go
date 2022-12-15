@@ -2,6 +2,7 @@ package repository
 
 import (
 	"be13/project/features/reservation"
+	"time"
 
 	"gorm.io/gorm"
 )
@@ -10,9 +11,9 @@ type Reservation struct {
 	gorm.Model
 	HomestayID uint
 	UserID     uint
-	CheckIn    string
-	CheckOut   string
-	Price      int
+	CheckIn    time.Time
+	CheckOut   time.Time
+	Price      float64
 }
 
 func FromCore(dataCore reservation.CoreReservation) Reservation { //fungsi yang mengambil data dari entities usercore dan merubah data ke user gorm(model.go)
@@ -44,4 +45,27 @@ func ListModelTOCore(dataModel []Reservation) []reservation.CoreReservation { //
 		dataCore = append(dataCore, value.ModelsToCore())
 	}
 	return dataCore //  untuk menampilkan data ke controller
+}
+
+type Homestay struct {
+	gorm.Model
+	Title       string
+	Description string
+	Address     string
+	AvgRate     float64
+	Price       int
+	UserID      uint
+	Images      string
+	Comments    []Comment
+	Checks      []Reservation
+}
+
+type Comment struct {
+	gorm.Model
+	HomestayID uint
+	UserID     uint
+	Notes      string
+	Ratings    int
+	CreatedAt  time.Time
+	UpdatedAt  time.Time
 }

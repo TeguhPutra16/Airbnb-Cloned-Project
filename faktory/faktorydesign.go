@@ -13,6 +13,9 @@ import (
 	deliveryHome "be13/project/features/homestay/delivery"
 	repoHome "be13/project/features/homestay/repository"
 	serviceHome "be13/project/features/homestay/service"
+	deliveryReserve "be13/project/features/reservation/delivery"
+	repoReserve "be13/project/features/reservation/repository"
+	serviceReserve "be13/project/features/reservation/service"
 	userDelivery "be13/project/features/user/delivery"
 	userRepo "be13/project/features/user/repository"
 	userService "be13/project/features/user/service"
@@ -41,5 +44,9 @@ func InitFactory(e *echo.Echo, db *gorm.DB) {
 	checkRepoFactory := repoCheck.NewCheck(db)
 	checkServiceFactory := serviceCheck.NewCheck(checkRepoFactory)
 	deliveryCheck.NewCheck(checkServiceFactory, e)
+
+	reserveRepoFactory := repoReserve.NewRes(db)
+	reserveServiceFactory := serviceReserve.NewRes(reserveRepoFactory)
+	deliveryReserve.NewRes(reserveServiceFactory, e)
 
 }

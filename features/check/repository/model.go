@@ -2,6 +2,7 @@ package repository
 
 import (
 	"be13/project/features/homestay"
+	"time"
 
 	"gorm.io/gorm"
 )
@@ -22,9 +23,9 @@ type Reservation struct {
 	gorm.Model
 	HomestayID uint
 	UserID     uint
-	CheckIn    string
-	CheckOut   string
-	Price      int
+	CheckIn    time.Time
+	CheckOut   time.Time
+	Price      float64
 }
 type Comment struct {
 	gorm.Model
