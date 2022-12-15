@@ -28,8 +28,8 @@ func (service *commentService) CreateComment(input comment.CoreComment) (err err
 }
 
 // DeleteById implements comment.ServiceInterface
-func (service *commentService) DeleteById(id int) (comment.CoreComment, error) {
-	data, err := service.commentRepository.DeleteById(id) // memanggil struct entities repository yang ada di entities yang berisi coding logic
+func (service *commentService) DeleteById(id, userid int) (comment.CoreComment, error) {
+	data, err := service.commentRepository.DeleteById(id, userid) // memanggil struct entities repository yang ada di entities yang berisi coding logic
 	return data, err
 }
 
@@ -44,8 +44,8 @@ func (*commentService) GetById(id int) (data comment.CoreComment, err error) {
 }
 
 // UpdateComment implements comment.ServiceInterface
-func (service *commentService) UpdateComment(id int, input comment.CoreComment) error {
-	errUpdate := service.commentRepository.UpdateComment(id, input)
+func (service *commentService) UpdateComment(id int, userid int, input comment.CoreComment) error {
+	errUpdate := service.commentRepository.UpdateComment(id, userid, input)
 	if errUpdate != nil {
 		return errors.New("update comment failed")
 	}

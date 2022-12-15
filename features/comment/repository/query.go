@@ -57,7 +57,16 @@ func (repo *commentRepository) CreateComment(input comment.CoreComment) (err err
 }
 
 // DeleteById implements comment.RepositoryInterface
-func (repo *commentRepository) DeleteById(id int) (comment.CoreComment, error) {
+func (repo *commentRepository) DeleteById(id int, userid int) (comment.CoreComment, error) {
+	komen1 := Comment{}
+	txres1 := repo.db.Where("id=?", id).Find(&komen1)
+	if txres1.Error != nil {
+		return comment.CoreComment{}, txres1.Error
+	}
+	if komen1.UserID != uint(userid) {
+		return comment.CoreComment{}, errors.New("hanya bisa ubah data sendiri")
+	}
+
 	komen := Comment{}
 	tx1 := repo.db.Delete(&komen, id)
 	if tx1.Error != nil {
@@ -87,12 +96,15 @@ func (*commentRepository) GetById(id int) (data comment.CoreComment, err error) 
 }
 
 // UpdateComment implements comment.RepositoryInterface
-func (repo *commentRepository) UpdateComment(id int, input comment.CoreComment) error {
+func (repo *commentRepository) UpdateComment(id int, userid int, input comment.CoreComment) error {
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	komen1 := Comment{}
 	txres := repo.db.Where("id=?", id).Find(&komen1)
 	if txres.Error != nil {
 		return txres.Error
+	}
+	if komen1.UserID != uint(userid) {
+		return errors.New("hanya bisa ubah data sendiri")
 	}
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	var commentModel []Comment

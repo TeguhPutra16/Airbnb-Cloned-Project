@@ -22,17 +22,17 @@ type CoreHomestay struct {
 type ServiceEntities interface {
 	GetAllhomestay() (data []CoreHomestay, err error)
 	Create(input CoreHomestay) (err error)
-	Update(id int, input CoreHomestay) error
+	Update(id int, userId int, input CoreHomestay) error
 	GetById(id int) (data CoreHomestay, err error)
 	GethHomestaybyidUser(user_id int) (data []CoreHomestay, err error)
-	DeleteById(id int) (CoreHomestay, error)
+	DeleteById(id int, userId int) (CoreHomestay, error)
 }
 
 type RepositoryEntities interface {
 	GetAll() (data []CoreHomestay, err error)
 	Create(input CoreHomestay) (err error)
-	Update(id int, input CoreHomestay) error
+	Update(id int, userId int, input CoreHomestay) error
 	GetById(id int) (data CoreHomestay, err error)
 	GethHomestaybyidUser(user_id int) (data []CoreHomestay, err error)
-	DeleteById(id int) (CoreHomestay, error)
+	DeleteById(id int, userId int) (CoreHomestay, error)
 }

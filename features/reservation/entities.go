@@ -17,3 +17,21 @@ type CoreReservation struct {
 	CreatedAt  time.Time
 	UpdatedAt  time.Time
 }
+
+type ServiceEntities interface {
+	GetAllhomestay() (data []CoreReservation, err error)
+	Create(input CoreReservation) (err error)
+	Update(id int, input CoreReservation) error
+	GetById(id int) (data CoreReservation, err error)
+	GethHomestaybyidUser(user_id int) (data []CoreReservation, err error)
+	DeleteById(id int) (CoreReservation, error)
+}
+
+type RepositoryEntities interface {
+	GetAllhomestay() (data []CoreReservation, err error)
+	Create(input CoreReservation) (err error)
+	Update(id int, input CoreReservation) error
+	GetById(id int) (data CoreReservation, err error)
+	GethHomestaybyidUser(user_id int) (data []CoreReservation, err error)
+	DeleteById(id int) (CoreReservation, error)
+}

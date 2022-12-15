@@ -27,8 +27,8 @@ func (service *homeStayService) Create(input homestay.CoreHomestay) (err error) 
 }
 
 // DeleteById implements homestay.ServiceEntities
-func (service *homeStayService) DeleteById(id int) (homestay.CoreHomestay, error) {
-	data, err := service.homeStayRepository.DeleteById(id) // memanggil struct entities repository yang ada di entities yang berisi coding logic
+func (service *homeStayService) DeleteById(id int, userId int) (homestay.CoreHomestay, error) {
+	data, err := service.homeStayRepository.DeleteById(id, userId) // memanggil struct entities repository yang ada di entities yang berisi coding logic
 	return data, err
 }
 
@@ -47,8 +47,8 @@ func (service *homeStayService) GetById(id int) (data homestay.CoreHomestay, err
 // GetBytime implements homestay.ServiceEntities
 
 // Update implements homestay.ServiceEntities
-func (service *homeStayService) Update(id int, input homestay.CoreHomestay) error {
-	errUpdate := service.homeStayRepository.Update(id, input)
+func (service *homeStayService) Update(id int, userId int, input homestay.CoreHomestay) error {
+	errUpdate := service.homeStayRepository.Update(id, userId, input)
 	if errUpdate != nil {
 		return errors.New("GAGAL mengupdate data , QUERY ERROR")
 	}

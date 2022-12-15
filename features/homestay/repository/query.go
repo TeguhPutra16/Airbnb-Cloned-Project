@@ -44,7 +44,16 @@ func (repo *homeStayRepository) Create(input homestay.CoreHomestay) error {
 }
 
 // DeleteById implements homestay.RepositoryEntities
-func (repo *homeStayRepository) DeleteById(id int) (homestay.CoreHomestay, error) {
+func (repo *homeStayRepository) DeleteById(id int, userId int) (homestay.CoreHomestay, error) {
+	homes := Homestay{}
+	tx := repo.db.Where("id=?", id).Find(&homes)
+	if tx.Error != nil {
+		return homestay.CoreHomestay{}, tx.Error
+	}
+
+	if homes.UserID != uint(userId) {
+		return homestay.CoreHomestay{}, errors.New("hanya bisa ubah data sendiri")
+	}
 	home := Homestay{}
 	tx1 := repo.db.Delete(&home, id)
 	if tx1.Error != nil {
@@ -93,15 +102,22 @@ func (repo *homeStayRepository) GetById(id int) (data homestay.CoreHomestay, err
 // GetBytime implements homestay.RepositoryEntities
 
 // Update implements homestay.RepositoryEntities
-func (repo *homeStayRepository) Update(id int, input homestay.CoreHomestay) error {
+func (repo *homeStayRepository) Update(id int, userId int, input homestay.CoreHomestay) error {
+	var homes Homestay
 	home := FromCore(input)
-
+	tx1 := repo.db.Where("id=?", id).Find(&homes)
 	tx := repo.db.Model(&home).Where("id = ?", id).Updates(&home)
+
+	if homes.UserID != uint(userId) {
+		return errors.New("hanya bisa ubah data sendiri")
+	}
 
 	if tx.Error != nil {
 		return tx.Error
 	}
-
+	if tx1.Error != nil {
+		return tx1.Error
+	}
 	return nil
 }
 
