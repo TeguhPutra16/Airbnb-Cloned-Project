@@ -28,6 +28,6 @@ func MigrateDB(db *gorm.DB) {
 	db.AutoMigrate(&user.User{})
 	db.AutoMigrate(&home.Homestay{})
 	db.AutoMigrate(&home.Comment{})
-	db.AutoMigrate(&check.Check{})
+	db.AutoMigrate(&check.Reservation{})
 
 }

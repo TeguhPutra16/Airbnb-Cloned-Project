@@ -18,7 +18,7 @@ type User struct {
 	Role      string
 	Homestays []repository.Homestay
 	Comments  []repository.Comment
-	Checks    []check.Check
+	Checks    []check.Reservation
 }
 
 func FromUserCore(dataCore _user.CoreUser) User { //fungsi yang mengambil data dari entities usercore dan merubah data ke user gorm(model.go)

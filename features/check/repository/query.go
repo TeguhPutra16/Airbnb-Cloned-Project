@@ -22,7 +22,7 @@ func NewCheck(db *gorm.DB) check.RepositoryInterface {
 // GetAllhomestay implements check.RepositoryInterface
 func (repo *checkRepository) Checkroom(id int, check_in string, check_out string) (string, error) {
 
-	var check []Check
+	var check []Reservation
 	checkIn, errConvtime1 := time.Parse("02/01/2006", check_in)
 	if errConvtime1 != nil {
 		return "Error Convert time 1", errConvtime1

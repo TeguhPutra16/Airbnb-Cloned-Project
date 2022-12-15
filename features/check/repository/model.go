@@ -16,14 +16,15 @@ type Homestay struct {
 	UserID      uint
 	Images      string
 	Comments    []Comment
-	Checks      []Check
+	Checks      []Reservation
 }
-type Check struct {
+type Reservation struct {
 	gorm.Model
 	HomestayID uint
 	UserID     uint
 	CheckIn    string
 	CheckOut   string
+	Price      int
 }
 type Comment struct {
 	gorm.Model
