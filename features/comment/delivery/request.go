@@ -10,7 +10,7 @@ type CommentRequest struct {
 	Ratings    int    `json:"ratings" form:"ratings"`
 }
 
-func UserRequestToUserCore(data CommentRequest) comment.CoreComment {
+func RequestToCore(data CommentRequest) comment.CoreComment {
 	return comment.CoreComment{
 		HomestayID: data.HomestayID,
 		Notes:      data.Notes,

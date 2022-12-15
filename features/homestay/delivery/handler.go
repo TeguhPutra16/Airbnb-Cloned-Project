@@ -30,11 +30,6 @@ func NewHome(Service homestay.ServiceEntities, e *echo.Echo) {
 }
 
 func (delivery *homeStayDelivery) Create(c echo.Context) error {
-	// roletoken := middlewares.ExtractTokenUserRole(c)
-	// log.Println("Role Token", roletoken)
-	// if roletoken != "Host" {
-	// 	return c.JSON(http.StatusUnauthorized, helper.FailedResponse("Please Complete your Validation"))
-	// }
 
 	userIdtoken := middlewares.ExtractTokenUserId(c)
 	log.Println("user id", userIdtoken)
@@ -44,7 +39,17 @@ func (delivery *homeStayDelivery) Create(c echo.Context) error {
 	if errbind != nil {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("erorr read data"+errbind.Error()))
 	}
+	file, fileheader, err := c.Request().FormFile("images")
 
+	if err == nil {
+		res, err := helper.Uploader.UploadFile(file, fileheader.Filename)
+		if err != nil {
+			log.Print(err)
+			return c.JSON(http.StatusBadRequest, helper.FailedResponse("Name file already use"))
+		}
+		// log.Print(res)
+		homestayReq.Images = res
+	}
 	dataCore := UserRequestToUserCore(homestayReq)
 
 	dataCore.UserID = uint(userIdtoken)

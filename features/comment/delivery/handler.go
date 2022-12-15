@@ -28,12 +28,6 @@ func NewComment(Service comment.ServiceInterface, e *echo.Echo) {
 }
 
 func (delivery *commentDelivery) Create(c echo.Context) error {
-	// roletoken := middlewares.ExtractTokenUserRole(c)
-	// log.Println("Role Token", roletoken)
-	// if roletoken != "Host" {
-	// 	return c.JSON(http.StatusUnauthorized, helper.FailedResponse("Please Complete your Validation"))
-	// }
-
 	userIdtoken := middlewares.ExtractTokenUserId(c)
 	log.Println("user id", userIdtoken)
 
@@ -47,7 +41,7 @@ func (delivery *commentDelivery) Create(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("rates in range 0 to 5"))
 	}
 
-	dataCore := UserRequestToUserCore(commentReq)
+	dataCore := RequestToCore(commentReq)
 
 	dataCore.UserID = uint(userIdtoken)
 
@@ -88,7 +82,7 @@ func (delivery *commentDelivery) Update(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Error binding data "+errBind.Error()))
 	}
 
-	dataCore := UserRequestToUserCore(komenInput)
+	dataCore := RequestToCore(komenInput)
 	userIdtoken := middlewares.ExtractTokenUserId(c)
 	log.Println("user_id_token", userIdtoken)
 

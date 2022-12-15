@@ -13,6 +13,7 @@ type HomestayRespon struct {
 	AvgRate     int       `json:"avg_rate"`
 	Price       int       `json:"price"`
 	UserID      uint      `json:"user_id"`
+	Images      string    `json:"images"`
 	CreatedAt   time.Time `json:"created_at"`
 	UpdatedAt   time.Time `json:"updated_at"`
 }
@@ -28,6 +29,7 @@ func CoreToRespon(dataCore homestay.CoreHomestay) HomestayRespon { // data user 
 		UserID:      dataCore.UserID,
 		CreatedAt:   dataCore.CreatedAt,
 		UpdatedAt:   dataCore.UpdatedAt,
+		Images:      dataCore.Images,
 	}
 }
 func ListCoreToRespon(dataCore []homestay.CoreHomestay) []HomestayRespon { //data user.core data yang diambil dari entities ke respon struct

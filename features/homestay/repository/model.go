@@ -17,6 +17,7 @@ type Homestay struct {
 	AvgRate     int
 	Price       int
 	UserID      uint
+	Images      string
 	Comments    []Comment
 }
 
@@ -28,6 +29,7 @@ func FromCore(dataCore homestay.CoreHomestay) Homestay { //fungsi yang mengambil
 		AvgRate:     dataCore.AvgRate,
 		Price:       dataCore.Price,
 		UserID:      dataCore.UserID,
+		Images:      dataCore.Images,
 	} ///formating data berdasarkan data gorm dan kita mapping data yang kita butuhkan untuk inputan  klien
 	return homeGorm //insert user
 }
@@ -42,6 +44,7 @@ func (dataModel *Homestay) ModelsToCore() homestay.CoreHomestay { //fungsi yang 
 		UserID:      dataModel.UserID,
 		CreatedAt:   dataModel.CreatedAt,
 		UpdatedAt:   dataModel.UpdatedAt,
+		Images:      dataModel.Images,
 		Comments:    LoadFeedsModeltoCore(dataModel.Comments),
 	}
 }
