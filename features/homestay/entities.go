@@ -10,7 +10,7 @@ type CoreHomestay struct {
 	Title       string
 	Description string
 	Address     string
-	AvgRate     int
+	AvgRate     float64
 	Price       int
 	UserID      uint
 	CreatedAt   time.Time

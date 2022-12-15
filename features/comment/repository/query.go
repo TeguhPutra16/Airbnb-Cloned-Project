@@ -45,7 +45,7 @@ func (repo *commentRepository) CreateComment(input comment.CoreComment) (err err
 	repo.db.First(&homes, input.HomestayID)
 	////////////////////////////////////////proses update data avgrating homestay ketika comment ditambahkan/////////////////////////////////////////////////////////////////////////////////////////////
 	home := repository.Homestay{}
-	home.AvgRate = (homes.AvgRate + input.Ratings) / jumData
+	home.AvgRate = (homes.AvgRate + float64(input.Ratings)) / float64((jumData))
 
 	tx2 := repo.db.Model(&home).Where("id = ?", input.HomestayID).Updates(&home)
 
@@ -107,7 +107,7 @@ func (repo *commentRepository) UpdateComment(id int, input comment.CoreComment) 
 	repo.db.First(&homes, komen1.HomestayID)
 	////////////////////////////////////////proses update data avgrating homestay ketika comment ditambahkan/////////////////////////////////////////////////////////////////////////////////////////////
 	home := repository.Homestay{}
-	home.AvgRate = ((homes.AvgRate * jumData) - komen1.Ratings + input.Ratings) / jumData
+	home.AvgRate = ((homes.AvgRate * float64(jumData)) - float64(komen1.Ratings) + float64(input.Ratings)) / float64(jumData)
 
 	tx2 := repo.db.Model(&home).Where("id = ?", komen1.HomestayID).Updates(&home)
 
