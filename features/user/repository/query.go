@@ -75,7 +75,7 @@ func (repo *userRepository) Update(id int, input user.CoreUser) error {
 func (repo *userRepository) DeleteById(id int) (user.CoreUser, error) {
 
 	users := User{}
-	users.Status = "Deactivated"
+
 	tx := repo.db.Model(&users).Where("id = ?", id).Updates(&users)
 
 	if tx.Error != nil {
