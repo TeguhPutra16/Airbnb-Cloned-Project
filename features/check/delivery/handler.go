@@ -2,9 +2,10 @@ package delivery
 
 import (
 	"be13/project/features/check"
-	_delivery "be13/project/features/homestay/delivery"
 	"be13/project/utils/helper"
+	"errors"
 	"net/http"
+	"strconv"
 
 	"github.com/labstack/echo/v4"
 )
@@ -13,7 +14,7 @@ type checkDelivery struct {
 	checkServices check.ServiceInterface
 }
 
-func NewAuth(service check.ServiceInterface, e *echo.Echo) {
+func NewCheck(service check.ServiceInterface, e *echo.Echo) {
 	handler := &checkDelivery{
 		checkServices: service,
 	}
@@ -23,19 +24,23 @@ func NewAuth(service check.ServiceInterface, e *echo.Echo) {
 }
 
 func (delivery *checkDelivery) Checkroom(c echo.Context) error {
-	checkInput := CheckRequest{}
-	errBind := c.Bind(&checkInput)
-	if errBind != nil {
-		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Error binding data "+errBind.Error()))
-	}
 
-	dataUser, err := delivery.checkServices.GetAllhomestay(checkInput.CheckIn, checkInput.CheckOut)
+	room := c.QueryParam("room_id")
+
+	id, errConv := strconv.Atoi(room)
+	if errConv != nil {
+		return errors.New("id must integer")
+	}
+	CheckIn := c.QueryParam("check_in")
+	CheckOut := c.QueryParam("check_out")
+
+	data, err := delivery.checkServices.Checkroom(id, CheckIn, CheckOut)
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, helper.FailedResponse("failed login"))
+		return c.JSON(http.StatusInternalServerError, helper.FailedResponse("failed Get available house"))
 	}
 
-	data := _delivery.ListCoreToRespon(dataUser)
-
-	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("success login", data))
+	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("success get room's status", map[string]string{
+		"availability": data,
+	}))
 
 }

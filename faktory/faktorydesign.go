@@ -4,6 +4,9 @@ import (
 	deliveryAuth "be13/project/features/auth/delivery"
 	repoAuth "be13/project/features/auth/repository"
 	serviceAuth "be13/project/features/auth/service"
+	deliveryCheck "be13/project/features/check/delivery"
+	repoCheck "be13/project/features/check/repository"
+	serviceCheck "be13/project/features/check/service"
 	deliveryComment "be13/project/features/comment/delivery"
 	repoComment "be13/project/features/comment/repository"
 	serviceComment "be13/project/features/comment/service"
@@ -34,5 +37,9 @@ func InitFactory(e *echo.Echo, db *gorm.DB) {
 	commentRepoFactory := repoComment.NewComment(db)
 	commentServiceFactory := serviceComment.NewComment(commentRepoFactory)
 	deliveryComment.NewComment(commentServiceFactory, e)
+
+	checkRepoFactory := repoCheck.NewCheck(db)
+	checkServiceFactory := serviceCheck.NewCheck(checkRepoFactory)
+	deliveryCheck.NewCheck(checkServiceFactory, e)
 
 }

@@ -1,6 +1,7 @@
 package repository
 
 import (
+	check "be13/project/features/check/repository"
 	"be13/project/features/homestay/repository"
 	_user "be13/project/features/user"
 
@@ -17,6 +18,7 @@ type User struct {
 	Role      string
 	Homestays []repository.Homestay
 	Comments  []repository.Comment
+	Checks    []check.Reservation
 }
 
 func FromUserCore(dataCore _user.CoreUser) User { //fungsi yang mengambil data dari entities usercore dan merubah data ke user gorm(model.go)

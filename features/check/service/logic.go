@@ -2,7 +2,6 @@ package service
 
 import (
 	"be13/project/features/check"
-	"be13/project/features/homestay"
 )
 
 type checkService struct {
@@ -16,6 +15,7 @@ func NewCheck(repo check.RepositoryInterface) check.ServiceInterface {
 }
 
 // GetAllhomestay implements check.ServiceInterface
-func (*checkService) GetAllhomestay(check_in string, checkout_out string) (data []homestay.CoreHomestay, err error) {
-	panic("unimplemented")
+func (service *checkService) Checkroom(id int, check_in string, check_out string) (string, error) {
+	data, err := service.checkRepository.Checkroom(id, check_in, check_out)
+	return data, err
 }
