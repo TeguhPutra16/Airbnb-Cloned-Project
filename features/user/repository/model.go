@@ -1,8 +1,8 @@
 package repository
 
 import (
-	check "be13/project/features/check/repository"
 	"be13/project/features/homestay/repository"
+	check "be13/project/features/reservation/repository"
 	_user "be13/project/features/user"
 
 	"gorm.io/gorm"

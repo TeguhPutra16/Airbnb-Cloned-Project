@@ -1,9 +1,10 @@
 package repository
 
 import (
-	check "be13/project/features/check/repository"
 	"be13/project/features/comment"
 	"be13/project/features/homestay"
+	"be13/project/features/reservation/repository"
+	"time"
 
 	"gorm.io/gorm"
 )
@@ -18,7 +19,7 @@ type Homestay struct {
 	UserID      uint
 	Images      string
 	Comments    []Comment
-	Checks      []check.Reservation
+	Checks      []repository.Reservation
 }
 
 func FromCore(dataCore homestay.CoreHomestay) Homestay { //fungsi yang mengambil data dari entities usercore dan merubah data ke user gorm(model.go)
@@ -95,4 +96,13 @@ type User struct {
 	Role      string
 	Homestays []Homestay
 	Comments  []Comment
+}
+
+type Reservation struct {
+	gorm.Model
+	HomestayID uint
+	UserID     uint
+	CheckIn    time.Time
+	CheckOut   time.Time
+	Price      float64
 }

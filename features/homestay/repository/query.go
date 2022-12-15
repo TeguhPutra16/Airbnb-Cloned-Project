@@ -60,7 +60,7 @@ func (repo *homeStayRepository) DeleteById(id int, userId int) (homestay.CoreHom
 		return homestay.CoreHomestay{}, tx1.Error
 	}
 
-	txres := repo.db.Unscoped().Where("id=?", id).Find(&home)
+	txres := repo.db.Where("id=?", id).Find(&home)
 	if txres.Error != nil {
 		return homestay.CoreHomestay{}, txres.Error
 	}
