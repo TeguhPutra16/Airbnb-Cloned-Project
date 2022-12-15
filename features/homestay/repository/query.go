@@ -94,9 +94,9 @@ func (repo *homeStayRepository) GetById(id int) (data homestay.CoreHomestay, err
 
 // Update implements homestay.RepositoryEntities
 func (repo *homeStayRepository) Update(id int, input homestay.CoreHomestay) error {
-	userGorm := FromCore(input)
+	home := FromCore(input)
 
-	tx := repo.db.Model(&userGorm).Where("id = ?", id).Updates(&userGorm)
+	tx := repo.db.Model(&home).Where("id = ?", id).Updates(&home)
 
 	if tx.Error != nil {
 		return tx.Error

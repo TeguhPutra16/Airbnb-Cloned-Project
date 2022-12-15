@@ -15,6 +15,7 @@ type CoreHomestay struct {
 	UserID      uint
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
+	Images      string
 	Comments    []comment.CoreComment
 }
 

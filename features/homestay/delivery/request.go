@@ -9,6 +9,7 @@ type HomestayRequest struct {
 	Title       string `json:"title" form:"title"`
 	Description string `json:"description" form:"description"`
 	Price       int    `json:"price" form:"price"`
+	Images      string `json:"images" form:"images"`
 }
 
 func UserRequestToUserCore(data HomestayRequest) homestay.CoreHomestay {
@@ -17,5 +18,6 @@ func UserRequestToUserCore(data HomestayRequest) homestay.CoreHomestay {
 		Description: data.Description,
 		Address:     data.Address,
 		Price:       data.Price,
+		Images:      data.Images,
 	}
 }
