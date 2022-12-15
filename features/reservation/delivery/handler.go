@@ -41,11 +41,11 @@ func (delivery *reservasiDeliv) Create(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("erorr read data0"+errbind.Error()))
 	}
 	log.Println(Input.CheckIn)
-	res, errConvtime1 := time.Parse("02/01/2006", Input.CheckIn)
+	res, errConvtime1 := time.Parse("2006-01-02", Input.CheckIn)
 	if errConvtime1 != nil {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("erorr read data1"))
 	}
-	res1, errConvtime2 := time.Parse("02/01/2006", Input.CheckOut)
+	res1, errConvtime2 := time.Parse("2006-01-02", Input.CheckOut)
 	if errConvtime2 != nil {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("erorr read data2"))
 	}

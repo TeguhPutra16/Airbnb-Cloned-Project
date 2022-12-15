@@ -23,12 +23,12 @@ func NewCheck(db *gorm.DB) check.RepositoryInterface {
 func (repo *checkRepository) Checkroom(id int, check_in string, check_out string) (string, error) {
 
 	var check []Reservation
-	checkIn, errConvtime1 := time.Parse("02/01/2006", check_in)
+	checkIn, errConvtime1 := time.Parse("2006-01-02", check_in)
 	if errConvtime1 != nil {
 		return "Error Convert time 1", errConvtime1
 	}
 	log.Println("ini", check_in)
-	checkOut, errConvtime2 := time.Parse("02/01/2006", check_out)
+	checkOut, errConvtime2 := time.Parse("2006-01-02", check_out)
 	if errConvtime2 != nil {
 		return "Error Convert time 2", errConvtime2
 	}
