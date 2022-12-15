@@ -68,12 +68,9 @@ func (delivery *homeStayDelivery) DeleteById(c echo.Context) error {
 	userIdtoken := middlewares.ExtractTokenUserId(c)
 	log.Println("user_id_token", userIdtoken)
 	id, _ := strconv.Atoi(c.Param("id"))
-	del, err := delivery.homeStayService.DeleteById(id) //memanggil fungsi service yang ada di folder service
+	del, err := delivery.homeStayService.DeleteById(id, userIdtoken) //memanggil fungsi service yang ada di folder service
 	log.Println("user_id_comment", del.UserID)
-	if del.UserID != uint(userIdtoken) {
-		return c.JSON(http.StatusBadRequest, helper.FailedResponse("tidak bisa hapus selain komen sendri"))
 
-	}
 	//memanggil fungsi service yang ada di folder service
 
 	if err != nil {
@@ -96,12 +93,9 @@ func (delivery *homeStayDelivery) Update(c echo.Context) error {
 	dataCore := UserRequestToUserCore(homeInput)
 	userIdtoken := middlewares.ExtractTokenUserId(c)
 	log.Println("user_id_token", userIdtoken)
+	log.Println("UserID", dataCore.UserID)
 
-	if dataCore.UserID != uint(userIdtoken) {
-		return c.JSON(http.StatusBadRequest, helper.FailedResponse("hanya bisa update data sendiri "))
-
-	}
-	err := delivery.homeStayService.Update(id, dataCore)
+	err := delivery.homeStayService.Update(id, userIdtoken, dataCore)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, helper.FailedResponse("Failed update data"+err.Error()))
 	}
