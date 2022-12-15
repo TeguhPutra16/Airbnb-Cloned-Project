@@ -45,7 +45,7 @@ func (delivery *homeStayDelivery) Create(c echo.Context) error {
 		res, err := helper.Uploader.UploadFile(file, fileheader.Filename)
 		if err != nil {
 			log.Print(err)
-			return c.JSON(http.StatusBadRequest, helper.FailedResponse("Name file already use"))
+			return c.JSON(http.StatusBadRequest, helper.FailedResponse("Error upload file"))
 		}
 		// log.Print(res)
 		homestayReq.Images = res
