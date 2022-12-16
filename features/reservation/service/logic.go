@@ -21,8 +21,8 @@ func NewRes(repo reservation.RepositoryEntities) reservation.ServiceEntities { /
 }
 
 // Create implements reservation.ServiceEntities
-func (service *reservasiService) Create(input reservation.CoreReservation) (err error) {
-	service.reservasiRepository.Create(input)
+func (service *reservasiService) Create(input reservation.CoreReservation) error {
+	err := service.reservasiRepository.Create(input)
 	return err
 
 }

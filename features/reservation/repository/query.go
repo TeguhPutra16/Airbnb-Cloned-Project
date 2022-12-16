@@ -3,6 +3,7 @@ package repository
 import (
 	"be13/project/features/reservation"
 	"be13/project/features/reservation/service"
+	"errors"
 	"log"
 
 	"gorm.io/gorm"
@@ -20,7 +21,7 @@ func NewRes(db *gorm.DB) reservation.RepositoryEntities { // user.repository men
 }
 
 // Create implements reservation.RepositoryEntities
-func (repo *reservasiRepository) Create(input reservation.CoreReservation) (err error) {
+func (repo *reservasiRepository) Create(input reservation.CoreReservation) error {
 	model := Homestay{}
 	tx := repo.db.First(&model, input.HomestayID)
 	if tx.Error != nil {
@@ -40,6 +41,15 @@ func (repo *reservasiRepository) Create(input reservation.CoreReservation) (err 
 
 	if tx1.Error != nil {
 		return tx.Error
+	}
+	if tx.RowsAffected == 0 {
+		return errors.New("id not found")
+
+	}
+
+	if tx1.RowsAffected == 0 {
+		return errors.New("id not found")
+
 	}
 	return nil
 }
