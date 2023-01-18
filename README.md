@@ -16,7 +16,7 @@ Aplikasi ini merupakan suatu aplikasi yang memungkinan pengguna untuk menyewa pe
 
 --menyewa penginapan
 
-1. pengguna dapat melihat daftar seluruh penginapan yang ada di NumpangTidur;
+1. pengguna dapat melihat daftar seluruh penginapan yang ada.
 2. pengguna dapat mencari penginapan yang diinginkan berdasarkan nama penginapan;
 3. pengguna dapat mengecek ketersediaan penginapan;
 4. pengguna dapat melakukan penilaian dan memberi komentar pada penginapan yang disinggahi;
