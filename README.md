@@ -1,8 +1,4 @@
-<h1 align="center">:house: AirBNB Clone :house:</h1>
-
-<p align="center">
-   💫 Proyek kolaborasi alterra BE 13 & FE 10 💫
-</div>
+<h1 align="center">AirBNB Clone</h1>
 
 # Gambaran
 
