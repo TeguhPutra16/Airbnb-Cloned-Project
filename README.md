@@ -36,9 +36,8 @@ https://app.swaggerhub.com/apis-docs/Anti-Gen/PROJECT-BE13/1.0.0
 # Teknologi yang kami gunakan
 
 1. golang
-2. shell
-3. gcp
-4. docker
+2. gcp
+3. docker
 
 
 
